@@ -12,8 +12,6 @@ int menu(int height, int width)
     initscr();
     WINDOW *mainContainer;
 
-    //resize_term(height, width);
-
     char choice[20];
     bool inputError = false;
 
@@ -23,39 +21,15 @@ int menu(int height, int width)
     init_pair(3, COLOR_GREEN, COLOR_BLACK);
     init_pair(4, COLOR_BLUE, COLOR_BLACK);
     init_pair(5, COLOR_MAGENTA, COLOR_BLACK);
-
-
     init_pair(8, COLOR_WHITE, COLOR_RED);
 
-
-    //déclare taille et position des boites
-    mainContainer = subwin(stdscr, height, width, 0, 0);
-
-    //création des boites
-    box(mainContainer, 0, 0);
-
+    mainContainer = subwin(stdscr, height, width, 0, 0); //déclare taille et position des boites
+    box(mainContainer, ACS_VLINE, ACS_HLINE); //box(mainContainer, 0, 0); //création de la fenetre
 
     do{
-        clear();
-        wclear(mainContainer);
-
-        //affichage d'un cadre blanc autour de mainContainer
-        chtype ulcorner = ACS_ULCORNER;
-        chtype urcorner = ACS_URCORNER;
-        chtype llcorner = ACS_LLCORNER;
-        chtype lrcorner = ACS_LRCORNER;
-        chtype hline = ACS_HLINE;
-        chtype vline = ACS_VLINE;
-
-        mvwaddch(mainContainer, 0, 0, ulcorner);
-        mvwaddch(mainContainer, 0, width - 1, urcorner);
-        mvwaddch(mainContainer, height - 1, 0, llcorner);
-        mvwaddch(mainContainer, height - 1, width - 1, lrcorner);
-        mvwhline(mainContainer, 0, 1, hline, width - 2);
-        mvwhline(mainContainer, height - 1, 1, hline, width - 2);
-        mvwvline(mainContainer, 1, 0, vline, height - 2);
-        mvwvline(mainContainer, 1, width - 1, vline, height - 2);
-
+        /* Efface l'entree clavier incorrecte */
+        wmove(mainContainer,  LINES/3+12, 25);
+        wclrtoeol(mainContainer);
 
         //affichage du text
         const char *banner_text[] = {
@@ -76,7 +50,6 @@ int menu(int height, int width)
                 mvwprintw(mainContainer, 3+i, 2, "%s", banner_text[i]);
                 wattroff(mainContainer, A_BOLD | COLOR_PAIR(i));
             }
-
         }
 
         wattron(mainContainer, A_BOLD);
@@ -100,7 +73,7 @@ int menu(int height, int width)
 
         }
 
-        mvwgetstr(mainContainer, LINES/3+12, 27, choice);
+        mvwgetstr(mainContainer, LINES/3+12, 27, choice); //entree du choix
 
         switch (choice[0]) {
             case '1':
@@ -116,16 +89,16 @@ int menu(int height, int width)
                 endwin();
                 return -1;
 
-            default:
+            default: //Erreur de saisie
                 inputError = true;
-                //mvwprintw(mainContainer, LINES/3+12, 5, "Erreur de saisie");
         }
 
-        //refresh
-        refresh();
+        //refresh();
         wrefresh(mainContainer);
 
     } while (choice[0] != '1' && choice[0] != '2');
+
+    free(mainContainer);
 
     endwin();
     return 0;

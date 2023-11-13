@@ -72,10 +72,6 @@ int main(void) {
     mvwprintw(titleBox, 1, 1, "Jeu des paires");
     mvwprintw(titleBox, 2, 1, "Trouver les paires en un minimum de temps");
 
-    //affichage du cadre
-    //wborder(resultBox, '|', '|', '-', '-', '+', '+', '+', '+');
-
-
     //DisplayCard();
 
     while(key != 'q' && key != 'Q' && elapsed_time < 120){
