@@ -9,10 +9,12 @@
 
 int menu(int height, int width)
 {
+    /* Affiche le menu du jeu */
+
     initscr();
     WINDOW *mainContainer;
 
-    char choice[20];
+    char choice[2];
     bool inputError = false;
 
     start_color();
@@ -26,40 +28,41 @@ int menu(int height, int width)
     mainContainer = subwin(stdscr, height, width, 0, 0); //déclare taille et position des boites
     box(mainContainer, ACS_VLINE, ACS_HLINE); //box(mainContainer, 0, 0); //création de la fenetre
 
+    //affichage de la banniere
+    const char *banner_text[] = {
+            "============================================================================",
+            "  JJJJ  EEEEE  U   U     DDD   EEEEE  SSS     PPPP   AAAAA  III  RRRR   SSS",
+            "    J    E     U   U     D  D  E     S        P   P  A   A   I   R   R  S",
+            "    J    EEE   U   U     D   D EEE    SSS     PPPP   AAAAA   I   RRRR    SSS",
+            "J   J    E     U   U     D  D  E         S    P      A   A   I   R  R      S",
+            " JJJ     EEEEE   UUU      DDD   EEEEE  SSS    P      A   A  III  R   R  SSS",
+            "============================================================================"
+    };
+
+    for (int i = 0; i < 7; i++) {
+        if(i == 0 || i == 6){
+            mvwprintw(mainContainer, 3+i, 2, "%s", banner_text[i]);
+        } else {
+            wattron(mainContainer, A_BOLD | COLOR_PAIR(i));
+            mvwprintw(mainContainer, 3+i, 2, "%s", banner_text[i]);
+            wattroff(mainContainer, A_BOLD | COLOR_PAIR(i));
+        }
+    }
+
+    wattron(mainContainer, A_BOLD);
+    mvwprintw(mainContainer, LINES/3+3, 5, "MENU");
+    wattroff(mainContainer, A_BOLD);
+
+    mvwprintw(mainContainer, LINES/3+6, 5, "1. Un joueur");
+    mvwprintw(mainContainer, LINES/3+8, 5, "2. Autoplayer");
+
+    mvwprintw(mainContainer, LINES/3+12, 5, "Entrez votre choix :");
+
     do{
         /* Efface l'entree clavier incorrecte */
         wmove(mainContainer,  LINES/3+12, 25);
         wclrtoeol(mainContainer);
 
-        //affichage du text
-        const char *banner_text[] = {
-                "============================================================================",
-                "  JJJJ  EEEEE  U   U     DDD   EEEEE  SSS     PPPP   AAAAA  III  RRRR   SSS",
-                "    J    E     U   U     D  D  E     S        P   P  A   A   I   R   R  S",
-                "    J    EEE   U   U     D   D EEE    SSS     PPPP   AAAAA   I   RRRR    SSS",
-                "J   J    E     U   U     D  D  E         S    P      A   A   I   R  R      S",
-                " JJJ     EEEEE   UUU      DDD   EEEEE  SSS    P      A   A  III  R   R  SSS",
-                "============================================================================"
-        };
-
-        for (int i = 0; i < 7; i++) {
-            if(i == 0 || i == 6){
-                mvwprintw(mainContainer, 3+i, 2, "%s", banner_text[i]);
-            } else {
-                wattron(mainContainer, A_BOLD | COLOR_PAIR(i));
-                mvwprintw(mainContainer, 3+i, 2, "%s", banner_text[i]);
-                wattroff(mainContainer, A_BOLD | COLOR_PAIR(i));
-            }
-        }
-
-        wattron(mainContainer, A_BOLD);
-        mvwprintw(mainContainer, LINES/3+3, 5, "MENU");
-        wattroff(mainContainer, A_BOLD);
-
-        mvwprintw(mainContainer, LINES/3+6, 5, "1. Un joueur");
-        mvwprintw(mainContainer, LINES/3+8, 5, "2. Autoplayer");
-
-        mvwprintw(mainContainer, LINES/3+12, 5, "Entrez votre choix :");
 
         if(inputError){ //Message d'erreur en gras et souligné
             const char *errorText = "Erreur de saisie";
@@ -73,7 +76,7 @@ int menu(int height, int width)
 
         }
 
-        mvwgetstr(mainContainer, LINES/3+12, 27, choice); //entree du choix
+        mvwgetnstr(mainContainer, LINES/3+12, 27, choice, 1); //entree du choix
 
         switch (choice[0]) {
             case '1':
@@ -93,7 +96,6 @@ int menu(int height, int width)
                 inputError = true;
         }
 
-        //refresh();
         wrefresh(mainContainer);
 
     } while (choice[0] != '1' && choice[0] != '2');

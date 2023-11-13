@@ -57,3 +57,9 @@ mvwhline(mainContainer, height - 1, 1, hline, width - 2);
 mvwvline(mainContainer, 1, 0, vline, height - 2);
 mvwvline(mainContainer, 1, width - 1, vline, height - 2);
 ```
+
+**Entrée clavier qui n'accepte que 3 caractères**
+
+```C
+mvwgetnstr(mainContainer, positionX, positionY, input, 3);
+```
