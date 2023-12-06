@@ -43,14 +43,14 @@ void DisplayCard(Carte * c,int longeur,int largeur,int numCard)
         wrefresh(c->carte);
         break;
    }
-    
+
 }
 
 void AttributsPointeur(Carte * deck,Carte * current_focus,Carte * compared,int TAILLE)
 {
     /*
         Cette fonction prend un deck de carte, la carte focus au moment ou elle est appelee, une eventuelle carte a comparer et la taille du deck
-        elle affiche et change les valeurs de chaque carte en fonctio de leur etat
+        elle affiche et change les valeurs de chaque carte en fonctions de leur etat
     */
     for(int i = 0;i<TAILLE;i++)
     {
@@ -74,7 +74,7 @@ void AttributsPointeur(Carte * deck,Carte * current_focus,Carte * compared,int T
             compared->etat = 2;
             DisplayCard(compared,LONGUEUR,LARGEUR,i);
         }
-        
+
     }
 }
 
@@ -92,7 +92,7 @@ int PosCardX(int numCard)
 
 int PosCardY(int numCard)
 {
-    switch(numCard)
+    switch(numCard % 6)
     {
     case 0:
         return 1;
@@ -112,24 +112,6 @@ int PosCardY(int numCard)
     case 5:
         return 56;
         break;
-    case 6:
-        return 1;
-        break;
-    case 7:
-        return 12;
-        break;
-    case 8:
-        return 23;
-        break;
-    case 9:
-        return 34;
-        break;
-    case 10:
-        return 45;
-        break;
-    case 11:
-        return 56;
-        break;
     }
 }
 
@@ -145,7 +127,7 @@ void LettreAlea(Carte * deck,char lettre[],int taille)
         //et on echange cette lettre avec la dernire lettre pour n'avoir que celle
         //non touchee au debut de l'array
         (deck + taille - i - 1)->var = *(lettre + index);
-        temp = lettre[i];   
+        temp = lettre[i];
         lettre[i] = lettre[index];
         lettre[index] = temp;
     }
@@ -189,7 +171,7 @@ Carte * rechercheCarteAccessible(Carte * deck,Carte * debut,Carte * fin,Carte * 
     */
     Carte * val_return = NULL;
     Carte * current_val = current_focus;
-    
+
     int count = 0,old_index = *current_index;   //on a besoin de current_index pour eviter de perdre l'original pour l'affichage des cartes
 
     if(direction == 'g')
@@ -208,9 +190,9 @@ Carte * rechercheCarteAccessible(Carte * deck,Carte * debut,Carte * fin,Carte * 
                 else
                 {
                     current_val--;
-                    *current_index-= 1; 
+                    *current_index-= 1;
                 }
-                    
+
             }
             count++;
             if(count > 12)
@@ -220,7 +202,7 @@ Carte * rechercheCarteAccessible(Carte * deck,Carte * debut,Carte * fin,Carte * 
                 val_return = current_focus;
                 *current_index = old_index;
             }
-                
+
         }
     }else
     {
@@ -240,7 +222,7 @@ Carte * rechercheCarteAccessible(Carte * deck,Carte * debut,Carte * fin,Carte * 
                     current_val++;
                     *current_index+= 1;
                 }
-                   
+
             }
             count++;
             if(count > 12)
@@ -252,6 +234,6 @@ Carte * rechercheCarteAccessible(Carte * deck,Carte * debut,Carte * fin,Carte * 
     }
     if(current_focus->etat != 3)
         current_focus->etat = 0;
-        
+
     return val_return;
 }
