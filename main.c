@@ -6,6 +6,7 @@
 
 #include "menu.h"
 #include "carte.h"
+#include "score.h"
 
 #include <ncurses.h>
 
@@ -171,7 +172,9 @@ int main(void) {
     // affichage des meilleurs scores
     resultBox = subwin(stdscr, 7, width, 23, 0);
     box(resultBox, ACS_VLINE, ACS_HLINE);
-    mvwprintw(resultBox, 1, 1, "Meilleur chrono :");
+    //mvwprintw(resultBox, 1, 1, "Meilleur chrono :");
+    
+    resultats(resultBox,(float)elapsed_time);
     wrefresh(resultBox);
     key = ' ';
     while(key != 'q' && key != 'Q')

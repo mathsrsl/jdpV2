@@ -1,6 +1,7 @@
 #include "score.h"
 
 void filFile(FILE *fichier2, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]){
+        //remplissage avec les score de base
         fputs("1", fichier2);
         fputs(" ", fichier2);
         fputs(nom1, fichier2);
@@ -22,6 +23,7 @@ void filFile(FILE *fichier2, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], c
 }
 
 void filVoidFile(FILE * fichier2, char nom[TAILLE_NOM], char score[TAILLE_SCORE]){
+    //Créé le fichier et le rempli si il n'y a aucun score dedans
     fputs("1", fichier2);
     fputs(" ", fichier2);
     fputs(nom, fichier2);
@@ -31,14 +33,17 @@ void filVoidFile(FILE * fichier2, char nom[TAILLE_NOM], char score[TAILLE_SCORE]
     fclose(fichier2);
 }
 
-void *resultats(WINDOW * resultBox, float temps){
+void resultats(WINDOW * resultBox, float temps){
+    //à decouper
     FILE *fichier = NULL;
     char n[100];
     fichier = fopen("jeuhighscore.txt","r");
     char nomJoueur[TAILLE_NOM];
-    mvwprintfw(resultBox, 1, 1, "Entrer votre nom en 4 lettres :\n");
-    scanf("%s", nomJoueur);
+    mvwprintw(resultBox, 1, 1, "Entrer votre nom en 4 lettres :\n");
+    //scanf("%s", nomJoueur);
+    mvwgetnstr(resultBox,3,2, nomJoueur, 4);
     char tempsJoueur[TAILLE_SCORE];
+    //transforme le float en chaine de caracteres
     snprintf(tempsJoueur, sizeof(tempsJoueur), "%.1f", temps);
     if (fichier == NULL){
         fichier = fopen("jeuhighscore.txt","w+");
@@ -129,7 +134,9 @@ void *resultats(WINDOW * resultBox, float temps){
         }
         fichier = fopen("jeuhighscore.txt","w+");
         filFile(fichier, nom1, score1, nom2, score2, nom3, score3);
-        mvwprintw(resultBox, 1, 1, "Meilleur chrono :\n1 %s %s\n2 %s %s\n3 %s %s", nom1, score1, nom2, score2, nom3, score3);
+        wclear(resultBox);
+        mvwprintw(resultBox, 1, 1, "Victoire \nMeilleur chrono :\n1 %s %s\n2 %s %s\n3 %s %s", nom1, score1, nom2, score2, nom3, score3);
+        //saut a la ligne buger
     }
 }
 
