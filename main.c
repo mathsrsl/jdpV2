@@ -174,7 +174,7 @@ int main(void) {
     box(resultBox, ACS_VLINE, ACS_HLINE);
     //mvwprintw(resultBox, 1, 1, "Meilleur chrono :");
     
-    resultats(resultBox,(float)elapsed_time);
+    results(resultBox, (float)elapsed_time, game);
     wrefresh(resultBox);
     key = ' ';
     while(key != 'q' && key != 'Q')
