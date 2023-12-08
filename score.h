@@ -12,14 +12,15 @@
 
 void filFile(FILE *fichier2, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]);
 void filVoidFile(FILE * fichier2, char nom[TAILLE_NOM], char score[TAILLE_SCORE]);
-void resultats(WINDOW * resultBox, float temps,bool game);
+void results(WINDOW * resultBox, float temps, bool game);
 
-//fonction pour recrire dans un fichier
-void WriteResults(float temps);
+//fonctions en fonction de game
+void winResults(WINDOW * resultBox, float temps, bool game);
+void looseResults(WINDOW * resultBox, bool game);
 
 //affiche simplement les resultats a la fin du jeu,
 //perdu ou gagné
-void DisplayResults();
+void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]);
 
 
 #endif // SCORE_H_INCLUDED
