@@ -12,9 +12,9 @@ gcc -o game main.c menu.c -lncurses -Wall
 ./game
 ```
 
-## Note
+## Notes
 
-**Affichage des carte en couleurs :**
+**Affichage des cartes en couleurs :**
 
 ```C
 //define color
