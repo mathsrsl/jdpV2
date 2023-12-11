@@ -14,15 +14,6 @@ int main(void) {
 
     initscr();
 
-    //creation du deck avec les 12 cartes
-    Carte * deck = CreationDeck();
-    Carte * current_focus = &deck[0];   //pointeur permettant de savoir quel carte est focus
-    Carte * compared = NULL;        //pointeur qui sera initialisee seulement si une carte est selectionnee
-    int current_index = 0;          //permet de savoir ou on se trouve dans le deck
-    bool game = 1;                  //permet de savoir la personne a trouvée toute les paires
-    bool freezeInput = 1;           //permet de savoir si l'on doit bloquer tout deplacement
-    int count = 0;
-
     int height = 30;
     int width = 80; //100
     int rows, cols;
@@ -38,7 +29,6 @@ int main(void) {
     }
 
     
-
     //Afficher le menu du jeu
     menuChoice = menu(height, width);
 
@@ -57,6 +47,14 @@ int main(void) {
     nodelay(stdscr, TRUE); //eviter que getch() bloque la boucle
     keypad(stdscr, TRUE); // pour les touches spécials (flèches)
 
+    //creation du deck avec les 12 cartes
+    Carte * deck = CreationDeck();
+    Carte * current_focus = &deck[0];   //pointeur permettant de savoir quel carte est focus
+    Carte * compared = NULL;        //pointeur qui sera initialisee seulement si une carte est selectionnee
+    bool game = 1;                  //permet de savoir la personne a trouvée toute les paires
+    bool freezeInput = 1;           //permet de savoir si l'on doit bloquer tout deplacement
+    int count = 0;
+
     WINDOW *titleBox, *chronoBox, *resultBox;
 
     int key;
@@ -72,7 +70,7 @@ int main(void) {
     init_pair(2, COLOR_GREEN, COLOR_BLACK);
     init_pair(3,COLOR_WHITE,COLOR_BLACK);   //carte normal
     init_pair(4,COLOR_GREEN,COLOR_BLACK);   //carte focus
-    init_pair(5,COLOR_BLUE,COLOR_BLACK);    //carte comparee
+    init_pair(5,COLOR_BLUE,COLOR_BLACK);    //carte comparée
 
     //obtenir le temps au début de l'exec
     clock_gettime(CLOCK_REALTIME, &start_time);
@@ -104,24 +102,25 @@ int main(void) {
         mvwprintw(chronoBox, 2, 1, "KEY DETECT : %c", key);
 
         
-
+        //savoir si il faut bloquer la récuperation d'input ou s'il faut continuer de les lires
         if(freezeInput)
         {
             //besoin de cette fonction ici pour que les cartes comparee ne changent pas de couleur
             //pendant les 2 secondes de delais
-            AttributsPointeur(deck,current_focus,compared,TAILLE_DECK);
+            DisplayCardPtr(deck,current_focus,compared,TAILLE_DECK);
             if (key == 'a') {
                 // cursorPos = (cursorPos>1) ? cursorPos-1 : 12;
-                current_focus = rechercheCarteAccessible(deck,deck,(deck + TAILLE_DECK - 1),current_focus,'g',&current_index,TAILLE_DECK);
+                current_focus = rechercheCarteAccessible(deck,deck,(deck + TAILLE_DECK - 1),current_focus,'g',TAILLE_DECK);
             } else if (key == 'z') {
-                current_focus = rechercheCarteAccessible(deck,deck,(deck + TAILLE_DECK - 1),current_focus,'d',&current_index,TAILLE_DECK);
+                current_focus = rechercheCarteAccessible(deck,deck,(deck + TAILLE_DECK - 1),current_focus,'d',TAILLE_DECK);
             }else if(key == 'e'){
                 //a decouper en fonction
                 if(compared == NULL && current_focus->etat != 3)    
                 {
+                    //fonction avec comme paramètre deck compared current_focus return un float
                     //on verifi si current_focus et bien egal a 1 pour eviter que les cartes revelee et bloquee soient debloquable
                     compared = current_focus;
-                    current_focus = rechercheCarteAccessible(deck,deck,(deck + TAILLE_DECK - 1),current_focus,'d',&current_index,TAILLE_DECK);
+                    current_focus = rechercheCarteAccessible(deck,deck,(deck + TAILLE_DECK - 1),current_focus,'d',TAILLE_DECK);
                 }else if(compared != NULL)
                 {
                     //on bloque les inputs et on recupere le temps auquel tout a ete bloque pour regarder quand arreter
@@ -129,7 +128,7 @@ int main(void) {
                     freezeInput = 0;
                     //changer les cartes de couleur pour la comparaison
                     AttributsInit(current_focus,2);
-                    DisplayCard(current_focus,LONGUEUR,LARGEUR,current_index);
+                    DisplayCard(current_focus,LONGUEUR,LARGEUR);
                 }
             }else if(key == 'q'){
                 //quitter avant la fin du timer
@@ -138,7 +137,7 @@ int main(void) {
         }else if(elapsed_time - chronoCompare >= 2 && elapsed_time != 0)
         {
             chronoCompare = 0;
-            freezeInput = 1;
+            freezeInput = 1;    //retour à la lecture d'input
             if(compared->var == current_focus->var)
             {
                 //changes l'etat pour etre sur qu'a la prochaine iteration de la boucle elles puissent changer de forme
@@ -148,6 +147,8 @@ int main(void) {
                 count++;
             }else
             {
+                //si les cartes ne sont pas pareil comapred  reste a NULL et a la prochaine iteration 
+                //current_focus sera de nouveau vert
                 compared = NULL;
             }
             
@@ -159,6 +160,7 @@ int main(void) {
         wrefresh(titleBox);
         wrefresh(chronoBox);
         
+        //recupère les inputs
         key = getch();
 
         if(elapsed_time >= 120)//a envlever ?

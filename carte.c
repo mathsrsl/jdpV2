@@ -1,52 +1,47 @@
 #include "carte.h"
 
+
 void AttributsInit(Carte * c,unsigned int etat)
 {
     c->etat = etat;  //change en fonction de si oui ou non la carte est focus
 }
 
-void DisplayCard(Carte * c,int longeur,int largeur,int numCard)
+void DisplayCard(Carte * c,int longeur,int largeur)
 {
     /*
         Fonction permettant de creer les bordures de cartes en fonction de leur etat
     */
+   c->carte = subwin(stdscr,longeur,largeur,c->X,c->Y);
    wclear(c->carte);
    switch(c->etat)
    {
     case 0:
-        c->carte = subwin(stdscr,longeur,largeur,PosCardX(numCard),PosCardY(numCard));
         wborder(c->carte,'|','|','-','-',' ',' ',' ',' ');
         wbkgd(c->carte,COLOR_PAIR(3));
         //mvwprintw(c->carte,3,5,"%c",c->var);
         //mvwprintw(c->carte,4,5,"%d",c->etat);
-        wrefresh(c->carte);
         break;
     case 1:
-        c->carte = subwin(stdscr,longeur,largeur,PosCardX(numCard),PosCardY(numCard));
         wborder(c->carte,'|','|','-','-',' ',' ',' ',' ');
         wbkgd(c->carte,COLOR_PAIR(4));
         mvwprintw(c->carte,3,5,"%c",c->var);
-        wrefresh(c->carte);
         break;
     case 2:
-        c->carte = subwin(stdscr,longeur,largeur,PosCardX(numCard),PosCardY(numCard));
         wborder(c->carte,'|','|','-','-',' ',' ',' ',' ');
         wbkgd(c->carte,COLOR_PAIR(5));
         mvwprintw(c->carte,3,5,"%c",c->var);
-        wrefresh(c->carte);
         break;
     case 3:
-        c->carte = subwin(stdscr,longeur,largeur,PosCardX(numCard),PosCardY(numCard));
         wborder(c->carte,'|','|','-','-','O','O','O','O');
         wbkgd(c->carte,COLOR_PAIR(3));
         mvwprintw(c->carte,3,5,"%c",c->var);
-        wrefresh(c->carte);
         break;
    }
+   wrefresh(c->carte);
 
 }
 
-void AttributsPointeur(Carte * deck,Carte * current_focus,Carte * compared,int TAILLE)
+void DisplayCardPtr(Carte * deck,Carte * current_focus,Carte * compared,int TAILLE)
 {
     /*
         Cette fonction prend un deck de carte, la carte focus au moment ou elle est appelee, une eventuelle carte a comparer et la taille du deck
@@ -57,22 +52,22 @@ void AttributsPointeur(Carte * deck,Carte * current_focus,Carte * compared,int T
         if(&deck[i] != current_focus && (deck + i)->etat != 3 && &deck[i] != compared)
         {
             (deck + i)->etat = 0;
-            DisplayCard((deck + i),LONGUEUR,LARGEUR,i);
+            DisplayCard((deck + i),LONGUEUR,LARGEUR);
         }else if((deck + i) == current_focus && (deck + i)->etat != 3)
         {
             current_focus->etat = 1;
-            DisplayCard(current_focus,LONGUEUR,LARGEUR,i);
+            DisplayCard(current_focus,LONGUEUR,LARGEUR);
         } else if((deck + i)->etat == 3)
         {
             (deck + i)->etat = 3;
-            DisplayCard((deck + i),LONGUEUR,LARGEUR,i);
+            DisplayCard((deck + i),LONGUEUR,LARGEUR);
         }
 
         //besoin de celui la en dehors pour ne pas avoir de probleme ou il ne serait pas lu
         if(compared != NULL && (deck + i) == compared)
         {
             compared->etat = 2;
-            DisplayCard(compared,LONGUEUR,LARGEUR,i);
+            DisplayCard(compared,LONGUEUR,LARGEUR);
         }
 
     }
@@ -152,6 +147,8 @@ Carte * CreationDeck()
         {
             //initialisation des attributs pour ne pas avoir de mauvaise suprise de valeur trop haute
             AttributsInit((deck + i),0);
+            (deck + i)->X = PosCardX(i);
+            (deck + i)->Y = PosCardY(i);
         }
     }
 
@@ -163,7 +160,7 @@ void LibereDeck(Carte * deck)
     free(deck);
 }
 
-Carte * rechercheCarteAccessible(Carte * deck,Carte * debut,Carte * fin,Carte * current_focus,char direction,int * current_index,int TAILLE)
+Carte * rechercheCarteAccessible(Carte * deck,Carte * debut,Carte * fin,Carte * current_focus,char direction,int TAILLE)
 {
     /*
     cette fonction permet de trouver la carte la plus proche pouvante etre utilisee par le pointeur de focus
@@ -172,7 +169,7 @@ Carte * rechercheCarteAccessible(Carte * deck,Carte * debut,Carte * fin,Carte * 
     Carte * val_return = NULL;
     Carte * current_val = current_focus;
 
-    int count = 0,old_index = *current_index;   //on a besoin de current_index pour eviter de perdre l'original pour l'affichage des cartes
+    int count = 0;   //on a besoin de current_index pour eviter de perdre l'original pour l'affichage des cartes
 
     if(direction == 'g')
     {
@@ -183,26 +180,17 @@ Carte * rechercheCarteAccessible(Carte * deck,Carte * debut,Carte * fin,Carte * 
             else
             {
                 if(current_val == debut)
-                {
+                    //va a la fin du deck si l'utilisateur appuie sur 'a' tout en étant au début
                     current_val = fin;
-                    *current_index = TAILLE - 1;
-                }
                 else
-                {
+                    //sinon on se déplace simplement en arrière
                     current_val--;
-                    *current_index-= 1;
-                }
-
             }
             count++;
             if(count > 12)
-            {
                 //si on essaye de se deplacer d'une carte a une autre quand il nous reste qu'une carte
                 //cette condition nous permet de sortir de la boucle
                 val_return = current_focus;
-                *current_index = old_index;
-            }
-
         }
     }else
     {
@@ -213,23 +201,13 @@ Carte * rechercheCarteAccessible(Carte * deck,Carte * debut,Carte * fin,Carte * 
             else
             {
                 if(current_val == fin)
-                {
                     current_val = debut;
-                    *current_index = 0;
-                }
                 else
-                {
                     current_val++;
-                    *current_index+= 1;
-                }
-
             }
             count++;
             if(count > 12)
-            {
                 val_return = current_focus;
-                *current_index = old_index;
-            }
         }
     }
     if(current_focus->etat != 3)
