@@ -152,44 +152,20 @@ void winResults(WINDOW * resultBox, float temps, bool game){
         }
         if (atoi(score3)>temps){
             if ((atoi(score1))>temps){
-                for (i=0;i<5;i++){
-                    score3[i]=score2[i];
-                }
-                for (i=0;i<5;i++){
-                    nom3[i]=nom2[i];
-                }
-                for (i=0;i<5;i++){
-                    score2[i]=score1[i];
-                }
-                for (i=0;i<5;i++){
-                    nom2[i]=nom1[i];
-                }
-                for (i=0;i<5;i++){
-                    score1[i]=tempsJoueur[i];
-                }
-                for (i=0;i<5;i++){
-                    nom1[i]=nomJoueur[i];
-                }
+                strcpy(score3, score2);
+                strcpy(nom3, nom2);
+                strcpy(score2, score1);
+                strcpy(nom2, nom1);
+                strcpy(score1, tempsJoueur);
+                strcpy(nom1, nomJoueur);
             }else if((atoi(score1))<temps && (atoi(score2))>temps){
-                for (i=0;i<5;i++){
-                    score3[i]=score2[i];
-                }
-                for (i=0;i<5;i++){
-                    nom3[i]=nom2[i];
-                }
-                for (i=0;i<5;i++){
-                    score2[i]=tempsJoueur[i];
-                }
-                for (i=0;i<5;i++){
-                    nom2[i]=nomJoueur[i];
-                }
+                strcpy(score3, score2);
+                strcpy(nom3, nom2);
+                strcpy(score2, tempsJoueur);
+                strcpy(nom2, nomJoueur);
             }else {
-                for (i=0;i<5;i++){
-                    score3[i]=tempsJoueur[i];
-                }
-                for (i=0;i<5;i++){
-                    nom3[i]=nomJoueur[i];
-                }
+                strcpy(score3, tempsJoueur);
+                strcpy(nom3, nomJoueur);
             }
         }
         fichier = fopen("jeuhighscore.txt","w+");
