@@ -98,14 +98,13 @@ void winResults(WINDOW * resultBox, float temps, bool game){
     FILE *fichier = NULL;
     fichier = fopen("jeuhighscore.txt","r");
     char nomJoueur[TAILLE_NOM];
-    mvwprintw(resultBox, 1, 1, "Entrer votre nom en 4 lettres :\n");
-    //scanf("%s", nomJoueur);
-    echo();
-    mvwgetnstr(resultBox, 2, 1, nomJoueur, 4);
     char tempsJoueur[TAILLE_SCORE];
     //transforme le float en chaine de caracteres
     snprintf(tempsJoueur, sizeof(tempsJoueur), "%.1f", temps);
     if (fichier == NULL){
+        mvwprintw(resultBox, 1, 1, "Entrer votre nom en 4 lettres :\n");
+        echo();
+        mvwgetnstr(resultBox, 2, 1, nomJoueur, 4);
         fichier = fopen("jeuhighscore.txt","w+");
         filVoidFile(fichier, nomJoueur, tempsJoueur);
     } else {
@@ -151,6 +150,9 @@ void winResults(WINDOW * resultBox, float temps, bool game){
             c = fgetc(fichier);
         }
         if (atoi(score3)>temps){
+            mvwprintw(resultBox, 1, 1, "Entrer votre nom en 4 lettres :\n");
+            echo();
+            mvwgetnstr(resultBox, 2, 1, nomJoueur, 4);
             if ((atoi(score1))>temps){
                 strcpy(score3, score2);
                 strcpy(nom3, nom2);
