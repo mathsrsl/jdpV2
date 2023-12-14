@@ -4,7 +4,11 @@
 
 **Compiler :**
 ```shell
-gcc -o game main.c menu.c -lncurses -Wall
+gcc -o game main.c menu.c carte.c score.c -lncurses -Wall
+```
+Or
+```shell
+make
 ```
 
 **Executer :**
