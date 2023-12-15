@@ -67,3 +67,9 @@ mvwvline(mainContainer, 1, width - 1, vline, height - 2);
 ```C
 mvwgetnstr(mainContainer, positionX, positionY, input, 3);
 ```
+
+## Avant de rendre 
+
+- Cacher les valeurs des cartes
+- Enlever l'affichage des touches préssées dans la chronoBox
+- Commenter le code
