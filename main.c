@@ -12,9 +12,10 @@
 
 int main(void)
 {
+/* ------------------ Initialisation du jeu et affichage de menu ------------------ */
+    initscr(); // Initialisation de la fenetre
 
-    initscr();
-
+    // Initialisation des variables
     int height = 30;
     int width = 80; // 100
     int rows, cols;
@@ -42,12 +43,13 @@ int main(void)
 
     /* ------------------ Affichage du jeu ------------------ */
 
-    clear();
-    curs_set(0);
-    cbreak();              // evite de d'attendre une nouvelle ligne pour getch()
-    noecho();              // desactive l'echo automatique des caracteres entréees
-    nodelay(stdscr, TRUE); // eviter que getch() bloque la boucle
-    keypad(stdscr, TRUE);  // pour les touches spécials (flèches)
+    // Initialisation de la fenetre
+    clear();                // efface l'ecran
+    curs_set(0);            // desactive le curseur
+    cbreak();               // evite de d'attendre une nouvelle ligne pour getch()
+    noecho();               // desactive l'echo automatique des caracteres entréees
+    nodelay(stdscr, TRUE);  // eviter que getch() bloque la boucle
+    keypad(stdscr, TRUE);   // pour les touches spécials (flèches)
 
     // creation du deck avec les 12 cartes
     Carte *deck = CreationDeck();
@@ -58,8 +60,9 @@ int main(void)
     bool freezeInput = 1;  // permet de savoir si l'on doit bloquer tout deplacement
     int count = 0;
 
-    WINDOW *titleBox, *chronoBox, *resultBox;
+    WINDOW *titleBox, *chronoBox, *resultBox; // Initialisation des fenetres
 
+    // Initialisation des variables
     int key;
     int cursorPos = 1;
     double chronoCompare = 0; // sera utile pour savoir si les cartes comparé doivent encore être affichée en mode comparaison
@@ -136,8 +139,8 @@ int main(void)
     // affichage des meilleurs scores
     resultBox = subwin(stdscr, 7, width, 23, 0);
     box(resultBox, ACS_VLINE, ACS_HLINE);
-    // mvwprintw(resultBox, 1, 1, "Meilleur chrono :");
 
+    // affichage des scores
     results(resultBox, (float)elapsed_time, game);
     wrefresh(resultBox);
     key = ' ';
@@ -146,6 +149,7 @@ int main(void)
 
     // si touche 'q' pressee : arret du jeu
 
+    // liberation de la memoire
     delwin(titleBox);
     delwin(chronoBox);
     delwin(resultBox);

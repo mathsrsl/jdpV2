@@ -73,3 +73,20 @@ mvwgetnstr(mainContainer, positionX, positionY, input, 3);
 - Cacher les valeurs des cartes
 - Enlever l'affichage des touches préssées dans la chronoBox
 - Commenter le code
+
+Arborescence de rendu :
+```shell
+- royaume_c
+  - src
+    - fichier1.c
+    - fichier2.c
+  - include
+    - fichier1.h
+    - fichier2.h
+  - obj
+    - fichier1.o
+    - fichier2.o
+  - bin
+    - exécutable
+
+```

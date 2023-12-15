@@ -10,11 +10,14 @@
 int menu(int height, int width)
 {
     /*
-     * Affiche le menu du jeu
-     * Retourne 1 si le joueur a choisi de jouer seul
-     * Retourne 2 si le joueur a choisi de jouer avec l'autoplayer
-     * Retourne -1 si le joueur a choisi de quitter
-     */
+    Fonction : menu
+    Param : int height, int width
+    Traitement : Affiche le menu du jeu
+    Retour :  1 si le joueur a choisi de jouer seul
+              2 si le joueur a choisi de jouer avec l'autoplayer
+             -1 si le joueur a choisi de quitter
+    */
+
 
     // Initialisation de la fenetre
     initscr();
