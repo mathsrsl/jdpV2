@@ -9,14 +9,22 @@
 
 int menu(int height, int width)
 {
-    /* Affiche le menu du jeu */
+    /*
+     * Affiche le menu du jeu
+     * Retourne 1 si le joueur a choisi de jouer seul
+     * Retourne 2 si le joueur a choisi de jouer avec l'autoplayer
+     * Retourne -1 si le joueur a choisi de quitter
+     */
 
+    // Initialisation de la fenetre
     initscr();
     WINDOW *mainContainer;
 
+    // Initialisation des variables
     char choice[2];
     bool inputError = false;
 
+    // Initialisation des couleurs
     start_color();
     init_pair(1, COLOR_RED, COLOR_BLACK);
     init_pair(2, COLOR_YELLOW, COLOR_BLACK);
@@ -49,6 +57,7 @@ int menu(int height, int width)
         }
     }
 
+    // Affichage du menu
     wattron(mainContainer, A_BOLD);
     mvwprintw(mainContainer, LINES/3+3, 5, "MENU");
     wattroff(mainContainer, A_BOLD);
@@ -59,12 +68,11 @@ int menu(int height, int width)
     mvwprintw(mainContainer, LINES/3+12, 5, "Entrez votre choix :");
 
     do{
-        /* Efface l'entree clavier incorrecte */
-        wmove(mainContainer,  LINES/3+12, 25);
+        wmove(mainContainer,  LINES/3+12, 25); // Efface l'entree clavier incorrecte
         wclrtoeol(mainContainer);
 
 
-        if(inputError){ //Message d'erreur en gras et souligné
+        if(inputError){ // Message d'erreur en gras, souligné et en rouge
             const char *errorText = "Erreur de saisie";
 
             int y = height / 2;
@@ -76,7 +84,7 @@ int menu(int height, int width)
 
         }
 
-        mvwgetnstr(mainContainer, LINES/3+12, 27, choice, 1); //entree du choix
+        mvwgetnstr(mainContainer, LINES/3+12, 27, choice, 1); //entree du choix du joueur
 
         switch (choice[0]) {
             case '1':
@@ -91,7 +99,6 @@ int menu(int height, int width)
             case 'Q':
                 endwin();
                 return -1;
-
             default: //Erreur de saisie
                 inputError = true;
         }
@@ -100,7 +107,7 @@ int menu(int height, int width)
 
     } while (choice[0] != '1' && choice[0] != '2');
 
-    free(mainContainer);
+    free(mainContainer); // Libération de la mémoire de la fenetre
 
     endwin();
     return 0;
