@@ -174,12 +174,7 @@ void autoplayer(int width){
         box(resultBox, ACS_VLINE, ACS_HLINE);
 
         // affichage des scores
-        results(resultBox, (float)elapsed_time, 1);
-        if(game){                                   //A ENLEVER POUR LE RENDU !!!!
-            mvwprintw(resultBox, 1, 1, "DEFAITE");
-        }else{
-            mvwprintw(resultBox, 1, 1, "VICTOIRE");
-        }
+        results(resultBox, (float)elapsed_time, game);
         wrefresh(resultBox);
         key = ' ';
         while (key != 'q' && key != 'Q')
