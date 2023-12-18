@@ -2,15 +2,34 @@
 
 void AttributsInit(Carte *c, unsigned int etat)
 {
-    c->etat = etat; // change en fonction de si oui ou non la carte est focus
+    /**
+     * Fonction : AttributsInit
+     * Param :
+     *      - c : la carte a modifier
+     *      - etat : entier qui modifiera la carte
+     * Traitement : la fonction change l'etat de la carte qui lui est donnée en parametère
+     *              cela permet de savoir si si la carte est focus,comparée ou trouvée.
+     * Retour : aucune valeur de retour
+     */
+    c->etat = etat;
 }
 
 void DisplayCard(Carte *c, int longeur, int largeur)
 {
-    /*
-        Fonction permettant de creer les bordures de cartes en fonction de leur etat
-    */
-    c->carte = subwin(stdscr, longeur, largeur, c->X, c->Y);
+    /**
+     * Fonction : DisplayCard
+     * Param :
+     *      - c : la carte a afficher
+     *      - longeur : la longeur de la carte
+     *      - largeur : la largeur de la carte
+     * Traitement : cette fonction prend en paramètre une carte, sa longeur et sa largeur
+     *              elle affiche la carte en fonction de son état (état étant dans la
+     *              structure carte), la longeur et largeur est un define dans le carte.h,
+     *              mais cela peut-être modifié. Les cartes en fonction de leur état prendrons
+     *              des couleurs ou non, un type de bordure précis ou non.
+     * Retour : aucune valeur de retour
+     */
+    c->carte = subwin(stdscr, longeur, largeur, c->Y, c->X);
     wclear(c->carte);
     switch (c->etat)
     {
@@ -41,10 +60,25 @@ void DisplayCard(Carte *c, int longeur, int largeur)
 
 void DisplayCardPtr(Carte *deck, Carte *current_focus, Carte *compared, int TAILLE)
 {
-    /*
-        Cette fonction prend un deck de carte, la carte focus au moment ou elle est appelee, une eventuelle carte a comparer et la taille du deck
-        elle affiche et change les valeurs de chaque carte en fonctions de leur etat
-    */
+    /**
+     * Fonction : DisplayCardPtr
+     * Param :
+     *      - deck : un pointeur de structure Carte qui va contenir toute les cartes du jeu
+     *      - current_focus : un pointeur de structure Carte pointant vers une carte se trouvant dans le deck
+     *                        sur laquelle l'utilisateur se trouve, l'état de cette cartes
+     *                        est 1.
+     *      - compared : un pointeur de structure Carte qui peut pointer sur une carte du deck comme être égal
+     *                   à NULL. Ce pointeur sert a comparer deux cartes entre elle.
+     *      - TAILLE : un entier qui est égal au nombre de carte qui se trouvent dans le deck,
+     *                 cet entier est un define dans le carte.h
+     * Traitement : Cette fonction prend en paramètres toute les informations qu'il lui faut
+     *              pour afficher les cartes en fonction de leur pointeur. Pour traiter chaque
+     *              carte dans le deck elle utilise une boucle for suivie de condition pour
+     *              reconnaitre les cartes pointée qui doivent avoir un certains affichage
+     *              des cartes qui ont été trouvée (et donc qui ne doivent pas changer
+     *              d'affichage) et celle qui ne sont ni focus ni comparée.
+     * Retour : aucune valeur de retour
+     */
     for (int i = 0; i < TAILLE; i++)
     {
         if (&deck[i] != current_focus && (deck + i)->etat != 3 && &deck[i] != compared)
@@ -53,7 +87,8 @@ void DisplayCardPtr(Carte *deck, Carte *current_focus, Carte *compared, int TAIL
             DisplayCard((deck + i), LONGUEUR, LARGEUR);
         }
         else if ((deck + i) == current_focus && (deck + i)->etat != 3)
-        {
+        { // la deuxième partie de la condition nous permet d'éviter qu'une carte trouvée
+            // puisse être reséléctionnée
             current_focus->etat = 1;
             DisplayCard(current_focus, LONGUEUR, LARGEUR);
         }
@@ -72,20 +107,36 @@ void DisplayCardPtr(Carte *deck, Carte *current_focus, Carte *compared, int TAIL
     }
 }
 
-int PosCardX(int numCard)
+int PosCardY(int numCard)
 {
-    /*
-        Cette fonciton renvoie simplement l'emplacement de la carte sur l'axe x
-        en fonction de sa place dans le deck, place que l'on donne en paramètre
-    */
+    /**
+     * Fonction : PosCardY
+     * Param :
+     *      - numCard : la place de la carte dans le deck
+     * Traitement : Cette fonction regarde si la place de la carte dans le deck représenté par
+     *              numCard est plus grand ou égal à 5 pour attribuer à la carte son emplacement
+     *              sur l'axe des ordonnées
+     * Retour : Cette fonction renvoie un entier qui défniie l'endroit ou sera afficher la carte
+     *          sur l'axe des ordonnées.
+     */
     if (numCard <= 5)
         return 4;
     else
         return 13;
 }
 
-int PosCardY(int numCard)
+int PosCardX(int numCard)
 {
+    /**
+     * Fonction : PosCardX
+     * Param :
+     *      - numCard : la place de la carte dans le deck
+     * Traitement : Cette fonction fait un modulo de la position de la carte dans le deck
+     *              et regarde le resultat pour attribuer à la carte un emplacement sur
+     *              l'axe des abscisse.
+     * Retour : cette fonction renvoie un entier qui définie l'endroit ou sera afficher la
+     *          carte sur l'axe des abscisse.
+     */
     switch (numCard % 6)
     {
     case 0:
@@ -111,9 +162,27 @@ int PosCardY(int numCard)
 
 void LettreAlea(Carte *deck, char lettre[], int taille)
 {
-    srand(time(NULL));
-    int index = 0; // index permettant de prendre une lettre au hasard dans le array
-    char temp;     // permet d'echanger la place des cartes
+    /**
+     * Fonction : LettreAlea
+     * Param :
+     *      - deck : un pointeur de structure Carte contenant toutes les cartes du jeu.
+     *      - lettre : un tableau de char contenant les lettres pour chaque carte.
+     *      - taille : la taille du tableau de lettre qui est aussi la taille du tableau
+     *                 de carte.
+     * Traitement : Cette fonction prend le deck de carte, le tableau de lettre (avec les lettres)
+     *              et enfin la taille du tableau de lettre. Elle va en suite rentrer dans la boucle for
+     *              et faire un pseudo aléatoire lui permettant de séléctionner une lettre par une lettre
+     *              qui ne sera jamais la même (sauf si c'est la paire). Une fois la lettre séléctionnée
+     *              elle va donner a la carte du deck (deck + i) la lettre qu'elle a trouvée et
+     *              continuer ainsi et vu que le random de 0 et 1 est impossible elle va donc
+     *              prendre les deux dernières lettres restantes et les donner aux deux dernières
+     *              cartes restantes.
+     * Retour : cette fonction retourne aucune valeur.
+     */
+
+    srand(time(NULL)); // initialise la seed pour avoir des nombres aléatoire différent a chaque appel
+    int index = 0;     // index permettant de prendre une lettre au hasard dans le array
+    char temp;         // permet d'echanger la place des cartes
 
     for (int i = taille - 1; i >= 2; i--)
     {
@@ -132,6 +201,18 @@ void LettreAlea(Carte *deck, char lettre[], int taille)
 
 void ManageInput(Carte *deck, Carte **compared, Carte **current_focus, bool *freezeInput, double *elapsed_time, double *chronoCompare, char input, bool *br)
 {
+    /**
+     * Fonction : ManageInput
+     * Param :
+     *      - deck : un pointeur de structure Carte contenant toutes les cartes du jeu
+     *      - compared : un pointeur de pointeur de struture Carte contenant NULL ou la carte
+     *                   à comparer.
+     *      - current_focus : un pointeur de pointeur de structure Carte contenant la carte
+     *                        où se trouve l'utilisateur dans le deck.
+     *      - freeze_input : un pointeur de booléen
+     * Traitement :
+     * Retour :
+     */
     // besoin de cette fonction ici pour que les cartes comparee ne changent pas de couleur
     // pendant les 2 secondes de delais
     DisplayCardPtr(deck, *current_focus, *compared, TAILLE_DECK);
