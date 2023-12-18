@@ -177,7 +177,7 @@ void LettreAlea(Carte *deck, char lettre[], int taille)
      *              continuer ainsi et vu que le random de 0 et 1 est impossible elle va donc
      *              prendre les deux dernières lettres restantes et les donner aux deux dernières
      *              cartes restantes.
-     * Retour : cette fonction retourne aucune valeur.
+     * Retour : aucune valeur de retour.
      */
 
     srand(time(NULL)); // initialise la seed pour avoir des nombres aléatoire différent a chaque appel
@@ -209,9 +209,19 @@ void ManageInput(Carte *deck, Carte **compared, Carte **current_focus, bool *fre
      *                   à comparer.
      *      - current_focus : un pointeur de pointeur de structure Carte contenant la carte
      *                        où se trouve l'utilisateur dans le deck.
-     *      - freeze_input : un pointeur de booléen
-     * Traitement :
-     * Retour :
+     *      - freezeInput : un pointeur de booléen premettant de savoir si il faut arrêter de prendre les inputs ou continuer
+     *      - elapsed_time : un pointeur de double permettant d'avoir le temps qui est passé depuis le début du jeu
+     *      - chronoCompare : un pointeur de double, sa valeur est a 0 par défaut et a l'issue de cette fonction il pourra
+     *                        prendre la valeur de elapsed_time ou restera à 0.
+     *      - input : un char qui prend comme valeur l'input fait par l'utilisateur (key dans le main)
+     *      - br : un pointeur de booléen qui est seulement utile pour faire marcher la touche 'q'
+     * Traitement : La fonction va d'abord appeler la fonction DisplayCardPtr pour afficher les cartes en fonction des pointeurs
+     *              et du deck, par la suite elle va regarder les inputs faits et déplacera le pointeur current_focus à droite ou 
+     *              à gauche dans le deck si 'a' ou 'z' sont pressés, sinon si 'e' est pressé alors il regarde si comparede vaut NULL
+     *              pour savoir si une carte est comparée pour savoir si il faut arrêter de prendre les inputs (donc modifier la valeur
+     *              du pointeur freezeInput) ou si il faut simplement décaler current_focus et continuer le jeu. Si il faut comparer deux
+     *              cartes elles prendront comme état 2 et le freezeInput sera égal à 0.
+     * Retour : aucune valeur de retour.
      */
     // besoin de cette fonction ici pour que les cartes comparee ne changent pas de couleur
     // pendant les 2 secondes de delais
@@ -255,7 +265,22 @@ void ManageInput(Carte *deck, Carte **compared, Carte **current_focus, bool *fre
 
 void CompareCard(Carte **current_focus, Carte **compared, bool *freezeInput, double *chronoCompare, int *count)
 {
-    *chronoCompare = 0;
+    /**
+     * Fonction : CompareCard
+     * Param : 
+     *      - current_focus : un pointeur de pointeur de structure Carte permettant de savoir ou l'on se trouve dans le deck
+     *      - compared : un pointeur de pointeur de structure Carte permettant de savoir quel carte séléctionnée pour être comparée
+     *      - freezeInput : un pointeur de booléen permttant de savoir si l'on doit prendre les inputs ou non
+     *      - chronoCompare : un pointeur de double utilisé pour l'attente de 2 secondes pour la comparaison des cartes
+     *      - count : un pointeur d'entier permetttant de savoir si toutes les paires ont été trouvées
+     * Traitement : Cette fonction fait la comparaison entre current_focus et compared pour savoir si ces deux cartes ont la même lettre
+     *              dans ce cas là il faudra les bloquer (état 3) et laisser current_focus a l'indice de la cartes que l'on a comparé
+     *              dans le cas contraire compared sera égal à NULL l'autre current_focus quand on reviendra dans la fonction ManageInput
+     *              prendra son état et couleur de base. Cette fonction est appelée seulement quand deux cartes sont comparées, donc
+     *              seulement quand freezeInput est égal à 0.
+     * Retour : aucune valeur de retour.
+    */
+    *chronoCompare = 0; // plus de carte a comparer
     *freezeInput = 1; // retour à la lecture d'input
     if ((*compared)->var == (*current_focus)->var)
     {
@@ -275,6 +300,16 @@ void CompareCard(Carte **current_focus, Carte **compared, bool *freezeInput, dou
 
 Carte *CreationDeck()
 {
+    /**
+     * Fonction : CreationDeck
+     * Param : aucun paramètres
+     * Traitement : Cette fonction commence par créer un tableau dynamiquement avec un calloc de taille TAILLE_DECK
+     *              qui est un define dans le fichier carte.h (la taille étant de 12). Par la suite elle créé un tableau
+     *              de lettre contenant les paires qui va être utilisé pour donner à chaque carte du deck une lettre grâce à
+     *              la fonction LettreAlea() et enfin les positions X et Y grâce au fonction PosCardX et PosCardY des Cartes 
+     *              et leur états sont initisalisés grâce à une boucle for.
+     * Retour : la fonction retourne le pointeur deck pour pouvoir l'utiliser dans le main comme dans d'autre fichier.
+    */
     // Creation du pointeur deck / tableau
     Carte *deck = (Carte *)calloc(TAILLE_DECK, sizeof(Carte));
 
@@ -304,9 +339,27 @@ void LibereDeck(Carte *deck)
 
 Carte *rechercheCarteAccessible(Carte *deck, Carte *debut, Carte *fin, Carte *current_focus, char direction, int TAILLE)
 {
-    /*
-    cette fonction permet de trouver la carte la plus proche pouvante etre utilisee par le pointeur de focus
-    les cartes pouvants etre focus sont les cartes ayant comme numero d'etat 0 (sans compter la cartes)
+    /**
+     * Fonction : rechercheCarteAccessible
+     * Param : 
+     *      - deck : un pointeur de structure Carte contenant toute les cartes du jeu
+     *      - debut : un pointeur de structure Carte pointant vers le début du deck
+     *      - fin : un pointeur de structure Carte pointant vers la fin du deck
+     *      - current_focus : un pointeur de structure Carte permettant de savoir ou se trouve le curseur
+     *                        dans le deck
+     *      - direction : un char qui peut prendre deux valeurs 'g' ou 'd' représentant respéctivement : gauche et droite
+     *      - TAILLE :  un entier contenant la taille du deck
+     * Traitement : Cette fonction va d'abord regarder dans quel sens elle doit itérer dans le tableau en fonction
+     *              de la variable direction, une fois cela fait elle rentre dans une boucle while, ayant pour condition 
+     *              que le pointeur de structure Carte val_return soit égal à NULL, pour trouver la 
+     *              carte la plus proche où le curseur pourra être posé. Si la fonction arrive a la fin/début du deck elle
+     *              utilisera les pointeurs début/fin pour continuer son itération, enfin si aucune carte n'est séléctionnable
+     *              (cela veut dire que presque toutes les paires ont été trouvées) alors une variable count qui est incrémentée
+     *              à chaque mouvement dans le deck vérifira la condition count > 12 et  val_return prendra la valeur de current_focus
+     *              ce qui nous fait sortir de la boucle while. Sinon si une carte est trouvée val_return prendra son adresse en valeur
+     *              et aura une valeur différente de NULL.
+     * Retour : Cette fonction renvoie un pointeur de structure Carte étant la carte dans le deck la plus proche où le curseur
+     *          peut être placé.
     */
     Carte *val_return = NULL;
     Carte *current_val = current_focus;
