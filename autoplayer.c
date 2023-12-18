@@ -113,9 +113,6 @@ void autoplayer(int width){
 
             AttributsInit(current_focus, 2);
             AttributsInit(compared, 2);
-            printf("1 : %d et %d\n", current_focus->etat, compared->etat);
-            /*current_focus->etat = 2;
-            compared->etat = 2;*/
 
             DisplayCard(current_focus, LONGUEUR, LARGEUR);
             DisplayCard(compared, LONGUEUR, LARGEUR);
