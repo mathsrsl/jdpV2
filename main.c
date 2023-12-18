@@ -7,6 +7,7 @@
 #include "menu.h"
 #include "carte.h"
 #include "score.h"
+#include "autoplayer.h"
 
 #include <ncurses.h>
 
