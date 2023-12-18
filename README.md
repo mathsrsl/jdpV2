@@ -4,7 +4,7 @@
 
 **Compiler :**
 ```shell
-gcc -o game main.c menu.c carte.c score.c -lncurses -Wall
+gcc -o game main.c menu.c carte.c score.c autoplayer.c -lncurses -Wall
 ```
 Or
 ```shell
