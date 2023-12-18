@@ -162,7 +162,7 @@ int main(void)
         printf("Au revoir !\n");
     }else if (menuChoice == 2){
         clear();
-        curset(0);
+        curs_set(0);
         autoplayer(width);
     }
     return 0;
