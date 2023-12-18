@@ -334,6 +334,13 @@ Carte *CreationDeck()
 
 void LibereDeck(Carte *deck)
 {
+    /**
+     * Fonction : LibereDeck
+     * Param : 
+     *      - deck : un pointeur de structure Carte contenant toute les cartes du jeu
+     * Traitement : Cette fonction libère l'espace mémoire alloué pour le deck de cartes
+     * Retour : aucune valeur de retour.
+    */
     free(deck);
 }
 
