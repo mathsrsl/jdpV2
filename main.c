@@ -38,7 +38,7 @@ int main(void)
     if (menuChoice == -2) {
         endwin();
         printf("Erreur, creation de ressource ncurses echoue\n");
-        return -1;
+        return -2;
     } else if (menuChoice == -1) { // Si touche q pressee
         endwin();
         printf("Au revoir\n");

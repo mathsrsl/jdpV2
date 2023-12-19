@@ -50,10 +50,12 @@ void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char s
 void looseResults(WINDOW * resultBox, bool game){
     FILE *fichier = NULL;
     fichier = fopen("jeuhighscore.txt","r");
+
     char c = fgetc(fichier);
     char nom1[TAILLE_NOM] = {0}, nom2[TAILLE_NOM] = {0}, nom3[TAILLE_NOM] = {0} ;
     char score1[TAILLE_SCORE] = {0}, score2[TAILLE_SCORE] = {0}, score3[TAILLE_SCORE] = {0};
     int espace = 0, i = 1, ligne = 1;
+
     while(c != EOF){
         switch (c) {
             case ' ' :
@@ -97,8 +99,10 @@ void looseResults(WINDOW * resultBox, bool game){
 void winResults(WINDOW * resultBox, float temps, bool game){
     FILE *fichier = NULL;
     fichier = fopen("jeuhighscore.txt","r");
+
     char nomJoueur[TAILLE_NOM];
     char tempsJoueur[TAILLE_SCORE];
+    
     //transforme le float en chaine de caracteres
     snprintf(tempsJoueur, sizeof(tempsJoueur), "%.1f", temps);
     if (fichier == NULL){
