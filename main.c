@@ -35,8 +35,11 @@ int main(void)
     // Afficher le menu du jeu
     menuChoice = menu(height, width);
 
-    if (menuChoice == -1)
-    { // Si touche q pressee
+    if (menuChoice == -2) {
+        endwin();
+        printf("Erreur, creation de ressource ncurses echoue\n");
+        return -1;
+    } else if (menuChoice == -1) { // Si touche q pressee
         endwin();
         printf("Au revoir\n");
         return 0;
@@ -45,20 +48,20 @@ int main(void)
         /* ------------------ Affichage du jeu ------------------ */
     
         // Initialisation de la fenetre
-        clear();                // efface l'ecran
-        curs_set(0);            // desactive le curseur
-        cbreak();               // evite de d'attendre une nouvelle ligne pour getch()
-        noecho();               // desactive l'echo automatique des caracteres entréees
-        nodelay(stdscr, TRUE);  // eviter que getch() bloque la boucle
-        keypad(stdscr, TRUE);   // pour les touches spécials (flèches)
+        clear();                                    // efface l'ecran
+        curs_set(0);                                // desactive le curseur
+        cbreak();                                   // evite de d'attendre une nouvelle ligne pour getch()
+        noecho();                                   // desactive l'echo automatique des caracteres entréees
+        nodelay(stdscr, TRUE);                      // eviter que getch() bloque la boucle
+        keypad(stdscr, TRUE);                       // pour les touches spécials (flèches)
     
         // creation du deck avec les 12 cartes
         Carte *deck = CreationDeck();
-        Carte *current_focus = &deck[0]; // pointeur permettant de savoir quel carte est focus
-        Carte *compared = NULL;          // pointeur qui sera initialisee seulement si une carte est selectionnee
-        // la variable br permet de sortir de la boucle avec le q
-        bool game = 1, br = 1; // permet de savoir la personne a trouvée toute les paires
-        bool freezeInput = 1;  // permet de savoir si l'on doit bloquer tout deplacement
+        Carte *current_focus = &deck[0];            // pointeur permettant de savoir quel carte est focus
+        Carte *compared = NULL;                     // pointeur qui sera initialisee seulement si une carte est selectionnee
+
+        bool game = 1, br = 1;                      // permet de savoir la personne a trouvée toute les paires, br permet de sortir de la boucle avec le la touche 'q'
+        bool freezeInput = 1;                       // permet de savoir si l'on doit bloquer tout deplacement
         int count = 0;
     
         WINDOW *titleBox, *chronoBox, *resultBox; // Initialisation des fenetres
@@ -160,10 +163,11 @@ int main(void)
         LibereDeck(deck);
     
         printf("Au revoir !\n");
+
     }else if (menuChoice == 2){
         clear();
         curs_set(0);
-        autoplayer(width);
+        //autoplayer(width);
     }
     return 0;
 }

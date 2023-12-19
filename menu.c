@@ -16,12 +16,17 @@ int menu(int height, int width)
     Retour :  1 si le joueur a choisi de jouer seul
               2 si le joueur a choisi de jouer avec l'autoplayer
              -1 si le joueur a choisi de quitter
+             -2 si creation de ressource ncurses echoue
     */
 
 
     // Initialisation de la fenetre
     initscr();
     WINDOW *mainContainer;
+
+    if (mainContainer == NULL) { // Si creation de ressource echoue (gestion d'erreur)
+        return -2;
+    }
 
     // Initialisation des variables
     char choice[2];
