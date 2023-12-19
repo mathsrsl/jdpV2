@@ -148,10 +148,8 @@ int main(void)
         results(resultBox, (float)elapsed_time, game);
         wrefresh(resultBox);
         key = ' ';
-        while (key != 'q' && key != 'Q')
+        while (key != 'q' && key != 'Q') // si touche 'q' pressee : arret du jeu
             key = getch();
-    
-        // si touche 'q' pressee : arret du jeu
     
         // liberation de la memoire
         delwin(titleBox);

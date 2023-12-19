@@ -102,7 +102,7 @@ void winResults(WINDOW * resultBox, float temps, bool game){
 
     char nomJoueur[TAILLE_NOM];
     char tempsJoueur[TAILLE_SCORE];
-    
+
     //transforme le float en chaine de caracteres
     snprintf(tempsJoueur, sizeof(tempsJoueur), "%.1f", temps);
     if (fichier == NULL){
