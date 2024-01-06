@@ -46,21 +46,21 @@ int menu(int height, int width)
 
     //affichage de la banniere
     const char *banner_text[] = {
-            "============================================================================",
-            "  JJJJ  EEEEE  U   U     DDD   EEEEE  SSS     PPPP   AAAAA  III  RRRR   SSS",
-            "    J    E     U   U     D  D  E     S        P   P  A   A   I   R   R  S",
-            "    J    EEE   U   U     D   D EEE    SSS     PPPP   AAAAA   I   RRRR    SSS",
-            "J   J    E     U   U     D  D  E         S    P      A   A   I   R  R      S",
-            " JJJ     EEEEE   UUU      DDD   EEEEE  SSS    P      A   A  III  R   R  SSS",
-            "============================================================================"
+            " \\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\ ",
+            "      _  _____ _       ____  _____ ____    ____  ____  _  ____  _____ ____",
+            "     / |/  __// \\ /\\  /  _ \\/  __// ___\\  /  __\\/  _ \\/ \\/  __\\/  __// ___\\",
+            "     | ||  \\  | | ||  | | \\||  \\  |    \\  |  \\/|| / \\|| ||  \\/||  \\  |    \\",
+            "  /\\_| ||  /_ | \\_/|  | |_/||  /_ \\___ |  |  __/| |-||| ||    /|  /_ \\___ |",
+            "  \\____/\\____\\\\____/  \\____/\\____\\\\____/  \\_/   \\_/ \\|\\_/\\_/\\_\\\\____\\\\____/",
+            " \\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\ "
     };
 
     for (int i = 0; i < 7; i++) {
         if(i == 0 || i == 6){
-            mvwprintw(mainContainer, 3+i, 2, "%s", banner_text[i]);
+            mvwprintw(mainContainer, 3+i, 1, "%s", banner_text[i]);
         } else {
             wattron(mainContainer, A_BOLD | COLOR_PAIR(i));
-            mvwprintw(mainContainer, 3+i, 2, "%s", banner_text[i]);
+            mvwprintw(mainContainer, 3+i, 1, "%s", banner_text[i]);
             wattroff(mainContainer, A_BOLD | COLOR_PAIR(i));
         }
     }
