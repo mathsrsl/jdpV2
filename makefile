@@ -1,5 +1,5 @@
 output: main.o menu.o carte.o score.o 
-	gcc main.o menu.o carte.o score.o -o game -lncurses
+	gcc main.o menu.o carte.o score.o -o game -lncurses -Wall
 
 debug: main.oDebug menu.o carte.oDebug score.o
 	gcc main.o menu.o carte.o score.o -o game -lncurses
