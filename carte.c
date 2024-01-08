@@ -42,7 +42,7 @@ void DisplayCard(Carte *c, int longeur, int largeur)
     case 1:
         wborder(c->carte, '|', '|', '-', '-', ' ', ' ', ' ', ' ');
         wbkgd(c->carte, COLOR_PAIR(4));
-        mvwprintw(c->carte, 3, 5, "%c", c->var);
+        //mvwprintw(c->carte, 3, 5, "%c", c->var);
         break;
     case 2:
         wborder(c->carte, '|', '|', '-', '-', ' ', ' ', ' ', ' ');
@@ -120,7 +120,7 @@ int PosCardY(int numCard)
      *          sur l'axe des ordonnées.
      */
     if (numCard <= 5)
-        return 4;
+        return 5;
     else
         return 13;
 }
@@ -140,22 +140,22 @@ int PosCardX(int numCard)
     switch (numCard % 6)
     {
     case 0:
-        return 1;
+        return 6;
         break;
     case 1:
-        return 12;
+        return 17;
         break;
     case 2:
-        return 23;
+        return 28;
         break;
     case 3:
-        return 34;
+        return 39;
         break;
     case 4:
-        return 45;
+        return 50;
         break;
     case 5:
-        return 56;
+        return 61;
         break;
     }
 }
