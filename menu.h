@@ -1,3 +1,5 @@
+#include <ncurses.h>
+
 #ifndef JDPV2_MENU_H
 #define JDPV2_MENU_H
 
