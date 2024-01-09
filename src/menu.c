@@ -4,7 +4,7 @@
 
 #include <ncurses.h>
 
-#include "menu.h"
+#include "../include/menu.h"
 
 
 int menu(int height, int width)

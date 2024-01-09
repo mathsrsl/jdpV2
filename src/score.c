@@ -1,4 +1,4 @@
-#include "score.h"
+#include "../include/score.h"
 
 void filFile(FILE *fichier2, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]){
         //remplissage avec les score de base

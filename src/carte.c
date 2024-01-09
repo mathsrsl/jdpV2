@@ -1,4 +1,4 @@
-#include "carte.h"
+#include "../include/carte.h"
 
 void AttributsInit(Carte *c, unsigned int etat)
 {
@@ -36,7 +36,7 @@ void DisplayCard(Carte *c, int longeur, int largeur)
     case 0:
         wborder(c->carte, '|', '|', '-', '-', ' ', ' ', ' ', ' ');
         wbkgd(c->carte, COLOR_PAIR(3));
-        // mvwprintw(c->carte,3,5,"%c",c->var);
+        mvwprintw(c->carte,3,5,"%c",c->var);
         // mvwprintw(c->carte,4,5,"%d",c->etat);
         break;
     case 1:

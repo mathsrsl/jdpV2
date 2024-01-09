@@ -4,10 +4,11 @@
 #include <unistd.h> //pour usleep
 #include <stdbool.h>
 
-#include "menu.h"
-#include "carte.h"
-#include "score.h"
-#include "autoplayer.h"
+#include "../include/menu.h"
+#include "../include/carte.h"
+#include "../include/score.h"
+#include "../include/autoplayer.h"
+#include "../include/bandeau.h"
 
 #include <ncurses.h>
 
@@ -64,7 +65,7 @@ int main(void)
         bool freezeInput = 1;                       // permet de savoir si l'on doit bloquer tout deplacement
         int count = 0;
     
-        WINDOW *titleBox, *chronoBox, *resultBox; // Initialisation des fenetres
+        WINDOW *resultBox; // Initialisation des fenetres
     
         // Initialisation des variables
         int key;
@@ -85,32 +86,17 @@ int main(void)
         // obtenir le temps au début de l'exec
         clock_gettime(CLOCK_REALTIME, &start_time);
     
-        // déclare taille et position des boites
-        titleBox = subwin(stdscr, 4, 60, 0, 0);
-        chronoBox = subwin(stdscr, 4, 19, 0, 61);
-    
-        // création des boites
-        box(titleBox, ACS_VLINE, ACS_HLINE);
-        box(chronoBox, ACS_VLINE, ACS_HLINE);
-    
-        // affichage du text
-        mvwprintw(titleBox, 1, 1, "Jeu des paires");
-        mvwprintw(titleBox, 2, 1, "Trouver les paires en un minimum de temps");
-    
         // DisplayCard();
-        while (game && br)
+        while (br)
         {
             if (count == 6)
+            {
                 game = 0;
+                br = 0;
+            }
+                
             // clear(); pas possible de faire ça
-            clock_gettime(CLOCK_REALTIME, &current_time); // obtenir temps actuel
-    
-            // calculer le temps ecoule (en sec + nanoseconde)
-            elapsed_time = (double)(current_time.tv_sec - start_time.tv_sec) +
-                           (double)(current_time.tv_nsec - start_time.tv_nsec) / 1.0e9;
-            // affichage du temps
-            mvwprintw(chronoBox, 1, 1, "chrono : %.1fs", elapsed_time);
-            mvwprintw(chronoBox, 2, 1, "KEY DETECT : %c", key);
+            elapsed_time = CalcElapsed_Time(start_time);
     
             // savoir si il faut bloquer la récuperation d'input ou s'il faut continuer à les lires
             if (freezeInput)
@@ -124,10 +110,6 @@ int main(void)
             }
     
             // mvwprintw(stdscr, 25, 25, "current focus : %p", current_focus);
-    
-            // refresh
-            wrefresh(titleBox);
-            wrefresh(chronoBox);
     
             // recupère les inputs
             key = getch();
@@ -152,8 +134,6 @@ int main(void)
             key = getch();
     
         // liberation de la memoire
-        delwin(titleBox);
-        delwin(chronoBox);
         delwin(resultBox);
     
         endwin();

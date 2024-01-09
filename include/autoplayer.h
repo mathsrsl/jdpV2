@@ -9,7 +9,6 @@
 
 #include "carte.h"
 
-
 void autoplayer(int width);
 
 double timer(double elapsed_time, WINDOW *chronoBox, struct timespec start_time, struct timespec current_time);

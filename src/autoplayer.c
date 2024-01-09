@@ -1,4 +1,4 @@
-#include "autoplayer.h"
+#include "../include/autoplayer.h"
 
 double timer(double elapsed_time, WINDOW *chronoBox, struct timespec start_time, struct timespec current_time){
     clock_gettime(CLOCK_REALTIME, &current_time); // obtenir temps actuel
