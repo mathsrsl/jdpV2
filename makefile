@@ -1,32 +1,31 @@
-output: main.o menu.o autoplayer.o bandeau.o carte.o score.o
-	gcc ../obj/main.o ../obj/menu.o ../obj/carte.o ../obj/score.o ../obj/autoplayer.o ../obj/bandeau.o -o ../bin/game -lncurses -Wall
+CC=gcc
+CFLAGS=-Wall
+DEBUGFLAGS=-g
+OBJDIR=./obj
+BINDIR=./bin
+SRCDIR=./src
 
-debug: main.oDebug menu.o carte.oDebug score.o autoplayer.o bandeau.o
-	gcc ../obj/main.o ../obj/menu.o ../obj/carte.o ../obj/score.o ../obj/autoplayer.o ../obj/bandeau.o -o ../bin/game -lncurses -Wall
+# List of object files separated by spaces
+OBJS=$(OBJDIR)/main.o $(OBJDIR)/menu.o $(OBJDIR)/carte.o $(OBJDIR)/score.o $(OBJDIR)/autoplayer.o $(OBJDIR)/bandeau.o
 
-main.o: main.c
-	gcc -c main.c -o ../obj/main.o
+# Default target
+all: $(BINDIR)/game
 
-main.oDebug: main.c
-	gcc -g -c main.c -o ../obj/main.o
+# Debug target
+debug: CFLAGS += $(DEBUGFLAGS)
+debug: $(BINDIR)/game
 
-menu.o: menu.c
-	gcc -c menu.c -o ../obj/menu.o
+# Linking the program
+$(BINDIR)/game: $(OBJS)
+	$(CC) $^ -o $@ -lncurses
 
-carte.o: carte.c
-	gcc -c carte.c -o ../obj/carte.o
+# Compiling source files to object files
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-carte.oDebug: carte.c
-	gcc -g -c carte.c -o ../obj/carte.o
-
-score.o: score.c
-	gcc -c score.c -o ../obj/score.o
-
-autoplayer.o: autoplayer.c
-	gcc -c autoplayer.c -o ../obj/autoplayer.o
-
-bandeau.o: bandeau.c
-	gcc -c bandeau.c -o ../obj/bandeau.o
-
+# Cleaning up the build
 clean:
-	rm ../obj/*.o ../bin/game
+	rm -f $(OBJDIR)/*.o $(BINDIR)/game
+
+.PHONY: all debug clean
+
