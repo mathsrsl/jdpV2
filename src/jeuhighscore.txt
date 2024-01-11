@@ -1,3 +1,1 @@
-1 ABCD 28.1
-2 vbgh 33.5
-3 abcd 34.7
+1 AAAA 38.8
