@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "bandeau.h"
+#include "score.h"
+
 #define LONGUEUR 7
 #define LARGEUR 11
 #define TAILLE_DECK 12
@@ -37,11 +40,11 @@ void LettreAlea(Carte *deck, char lettre[], int taille);
 
 // fonction permettant de prendre les inputs de deplacement, ne prend pas la commande q
 // pour que l'on puisse sortir de la boucle sans avoir a retourner quoi que ce soit
-void ManageInput(Carte *deck, Carte **compared, Carte **current_focus, bool *freezeInput, double *elapsed_time, double *chronoCompare, char input, bool *br);
+int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct timespec start_time, char input, bool *br);
 
 // cette fonction va être utilisée seulement quand on deux cartes sont comparée, elle permet
 // de renvoyer les modifications à faire sur les cartes et les variables utilisées
-void CompareCard(Carte **current_focus, Carte **compared, bool *freezeInput, double *chronoCompare, int *count);
+int CompareCard(Carte *current_focus, Carte *compared,struct timespec start_time, double chronoCompare);
 
 // Crée le deck de carte et renvoie un pointeur sur le deck, les cartes dans le deck ont leur attributs initialisé sauf WINDOW
 Carte *CreationDeck();
@@ -49,5 +52,7 @@ Carte *CreationDeck();
 void LibereDeck(Carte *deck);
 // prend le deck de carte et renvoie la carte accessible la plus proche
 Carte *rechercheCarteAccessible(Carte *deck, Carte *debut, Carte *fin, Carte *current_focus, char direction, int TAILLE);
+
+void Jeu(int width);
 
 #endif // CARTE_H_INCLUDED

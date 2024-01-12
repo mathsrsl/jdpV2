@@ -199,7 +199,7 @@ void LettreAlea(Carte *deck, char lettre[], int taille)
     (deck + 11)->var = *(lettre + 1);
 }
 
-void ManageInput(Carte *deck, Carte **compared, Carte **current_focus, bool *freezeInput, double *elapsed_time, double *chronoCompare, char input, bool *br)
+int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct timespec start_time, char input, bool *br)
 {
     /**
      * Fonction : ManageInput
@@ -231,39 +231,45 @@ void ManageInput(Carte *deck, Carte **compared, Carte **current_focus, bool *fre
     {
         // cursorPos = (cursorPos>1) ? cursorPos-1 : 12;
         *current_focus = rechercheCarteAccessible(deck, deck, (deck + TAILLE_DECK - 1), *current_focus, 'g', TAILLE_DECK);
+        return 0;
     }
     else if (input == 'z')
     {
         *current_focus = rechercheCarteAccessible(deck, deck, (deck + TAILLE_DECK - 1), *current_focus, 'd', TAILLE_DECK);
+        return 0;
     }
     else if (input == 'e')
     {
-        // a decouper en fonction
+        // on regarde si le pointeur de comparaison est vide ou si l'état de la carte séléctionnée n'est pas 3 (donc problème)
         if (*compared == NULL && (*current_focus)->etat != 3)
         {
             // fonction avec comme paramètre deck compared current_focus return un float
             // on verifi si current_focus et bien egal a 1 pour eviter que les cartes revelee et bloquee soient debloquable
             *compared = *current_focus;
             *current_focus = rechercheCarteAccessible(deck, deck, (deck + TAILLE_DECK - 1), *current_focus, 'd', TAILLE_DECK);
+            return 0;
         }
         else if (*compared != NULL)
         {
-            // on bloque les inputs et on recupere le temps auquel tout a ete bloque pour regarder quand arreter
-            *chronoCompare = *elapsed_time;
-            *freezeInput = 0;
-            // changer les cartes de couleur pour la comparaison
             AttributsInit(*current_focus, 2);
             DisplayCard(*current_focus, LONGUEUR, LARGEUR);
+            //sinon comparaison
+            int count = CompareCard(*current_focus,*compared,start_time,CalcElapsed_Time(start_time));
+            *compared = NULL;
+            return count;
         }
     }
     else if (input == 'q')
     {
         // quitter avant la fin du timer
         *br = 0;
+        return 0;
     }
+
+    return 0;
 }
 
-void CompareCard(Carte **current_focus, Carte **compared, bool *freezeInput, double *chronoCompare, int *count)
+int CompareCard(Carte *current_focus, Carte *compared,struct timespec start_time, double chronoCompare)
 {
     /**
      * Fonction : CompareCard
@@ -280,22 +286,26 @@ void CompareCard(Carte **current_focus, Carte **compared, bool *freezeInput, dou
      *              seulement quand freezeInput est égal à 0.
      * Retour : aucune valeur de retour.
     */
-    *chronoCompare = 0; // plus de carte a comparer
-    *freezeInput = 1; // retour à la lecture d'input
-    if ((*compared)->var == (*current_focus)->var)
+
+    double elapsed_time = CalcElapsed_Time(start_time);
+    char ch;
+    while(elapsed_time - chronoCompare < 2.0)
+    {
+        ch = getch();
+        elapsed_time = CalcElapsed_Time(start_time);
+        if(ch == 'q' || ch == 'Q')
+            return -1;
+    }
+
+    if (compared->var == current_focus->var)
     {
         // changes l'etat pour etre sur qu'a la prochaine iteration de la boucle elles puissent changer de forme
-        AttributsInit(*compared, 3);
-        AttributsInit(*current_focus, 3);
-        *compared = NULL;
-        *(count) += 1;
+        AttributsInit(compared, 3);
+        AttributsInit(current_focus, 3);
+        return 1;
     }
-    else
-    {
-        // si les cartes ne sont pas pareil comapred  reste a NULL et a la prochaine iteration
-        // current_focus sera de nouveau vert
-        *compared = NULL;
-    }
+    
+    return 0;
 }
 
 Carte *CreationDeck()
@@ -418,4 +428,88 @@ Carte *rechercheCarteAccessible(Carte *deck, Carte *debut, Carte *fin, Carte *cu
         current_focus->etat = 0;
     /// mvwprintw(stdscr, 27, 25, "current_val : %p", val_return);
     return val_return;
+}
+
+void Jeu(int width)
+{
+    /**Description à ajouter*/
+    /* ------------------ Affichage du jeu ------------------ */
+    
+        // Initialisation de la fenetre
+        clear();                                    // efface l'ecran
+        curs_set(0);                                // desactive le curseur
+        cbreak();                                   // evite de d'attendre une nouvelle ligne pour getch()
+        noecho();                                   // desactive l'echo automatique des caracteres entréees
+        nodelay(stdscr, TRUE);                      // eviter que getch() bloque la boucle
+        keypad(stdscr, TRUE);                       // pour les touches spécials (flèches)
+    
+        // creation du deck avec les 12 cartes
+        Carte *deck = CreationDeck();
+        Carte *current_focus = &deck[0];            // pointeur permettant de savoir quel carte est focus
+        Carte *compared = NULL;                     // pointeur qui sera initialisee seulement si une carte est selectionnee
+
+        bool game = 1, sortir = 1;                      // permet de savoir la personne a trouvée toute les paires, br permet de sortir de la boucle avec le la touche 'q'
+        bool freezeInput = 1;                       // permet de savoir si l'on doit bloquer tout deplacement
+        int count = 0;
+    
+        WINDOW *resultBox; // Initialisation des fenetres
+    
+        // Initialisation des variables
+        int key;
+        int cursorPos = 1;
+        double elasped_time = 0; 
+    
+        struct timespec start_time;
+    
+        // define color
+        start_color();
+        init_pair(1, COLOR_BLUE, COLOR_BLACK);
+        init_pair(2, COLOR_GREEN, COLOR_BLACK);
+        init_pair(3, COLOR_WHITE, COLOR_BLACK); // carte normal
+        init_pair(4, COLOR_GREEN, COLOR_BLACK); // carte focus
+        init_pair(5, COLOR_BLUE, COLOR_BLACK);  // carte comparée
+    
+        // obtenir le temps au début de l'exec
+        clock_gettime(CLOCK_REALTIME, &start_time);
+    
+        // DisplayCard();
+        while (sortir)
+        {
+            if (count == 6)
+            {
+                game = 0;
+                sortir = 0;
+            }
+
+            elasped_time = CalcElapsed_Time(start_time);
+            if ( elasped_time >= 120) // a envlever ?
+                break;
+    
+            // savoir si il faut bloquer la récuperation d'input ou s'il faut continuer à les lires
+            // la fonction ne permet pas de se déplacer, l'index est trouvée mais le pointeur n'est pas modifé
+            count += ManageInput(deck, &compared, &current_focus,start_time, key, &sortir);
+            //mvwprintw(stdscr, 25, 25, "current focus : %p,count :%d", compared,count);
+
+            // recupère les inputs
+            key = getch();
+
+            usleep(65000); // arret de 70ms pour alléger le processeur
+        }
+    
+        nodelay(stdscr, FALSE); // permettre de bloquer le prog tant que la touche 'q' n'est pas pressee
+    
+        // affichage des meilleurs scores
+        resultBox = subwin(stdscr, 7, width, 23, 0);
+        box(resultBox, ACS_VLINE, ACS_HLINE);
+    
+        // affichage des scores
+        results(resultBox, (float)elasped_time, game);
+        wrefresh(resultBox);
+        key = ' ';
+        while (key != 'q' && key != 'Q') // si touche 'q' pressee : arret du jeu
+            key = getch();
+    
+        // liberation de la memoire
+        delwin(resultBox);
+        LibereDeck(deck);
 }

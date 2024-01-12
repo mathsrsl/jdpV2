@@ -45,107 +45,18 @@ int main(void)
         printf("Au revoir\n");
         return 0;
     }else if(menuChoice == 1){
-
-        /* ------------------ Affichage du jeu ------------------ */
-    
-        // Initialisation de la fenetre
-        clear();                                    // efface l'ecran
-        curs_set(0);                                // desactive le curseur
-        cbreak();                                   // evite de d'attendre une nouvelle ligne pour getch()
-        noecho();                                   // desactive l'echo automatique des caracteres entréees
-        nodelay(stdscr, TRUE);                      // eviter que getch() bloque la boucle
-        keypad(stdscr, TRUE);                       // pour les touches spécials (flèches)
-    
-        // creation du deck avec les 12 cartes
-        Carte *deck = CreationDeck();
-        Carte *current_focus = &deck[0];            // pointeur permettant de savoir quel carte est focus
-        Carte *compared = NULL;                     // pointeur qui sera initialisee seulement si une carte est selectionnee
-
-        bool game = 1, br = 1;                      // permet de savoir la personne a trouvée toute les paires, br permet de sortir de la boucle avec le la touche 'q'
-        bool freezeInput = 1;                       // permet de savoir si l'on doit bloquer tout deplacement
-        int count = 0;
-    
-        WINDOW *resultBox; // Initialisation des fenetres
-    
-        // Initialisation des variables
-        int key;
-        int cursorPos = 1;
-        double chronoCompare = 0; // sera utile pour savoir si les cartes comparé doivent encore être affichée en mode comparaison
-    
-        struct timespec start_time, current_time;
-        double elapsed_time;
-    
-        // define color
-        start_color();
-        init_pair(1, COLOR_BLUE, COLOR_BLACK);
-        init_pair(2, COLOR_GREEN, COLOR_BLACK);
-        init_pair(3, COLOR_WHITE, COLOR_BLACK); // carte normal
-        init_pair(4, COLOR_GREEN, COLOR_BLACK); // carte focus
-        init_pair(5, COLOR_BLUE, COLOR_BLACK);  // carte comparée
-    
-        // obtenir le temps au début de l'exec
-        clock_gettime(CLOCK_REALTIME, &start_time);
-    
-        // DisplayCard();
-        while (br)
-        {
-            if (count == 6)
-            {
-                game = 0;
-                br = 0;
-            }
-                
-            // clear(); pas possible de faire ça
-            elapsed_time = CalcElapsed_Time(start_time);
-    
-            // savoir si il faut bloquer la récuperation d'input ou s'il faut continuer à les lires
-            if (freezeInput)
-            {
-                // la fonction ne permet pas de se déplacer, l'index est trouvée mais le pointeur n'est pas modifé
-                ManageInput(deck, &compared, &current_focus, &freezeInput, &elapsed_time, &chronoCompare, key, &br);
-            }
-            else if (elapsed_time - chronoCompare >= 2 && elapsed_time != 0)
-            {
-                CompareCard(&current_focus, &compared, &freezeInput, &chronoCompare, &count);
-            }
-    
-            // mvwprintw(stdscr, 25, 25, "current focus : %p", current_focus);
-    
-            // recupère les inputs
-            key = getch();
-    
-            if (elapsed_time >= 120) // a envlever ?
-                break;
-    
-            usleep(70000); // arret de 70ms pour alléger le processeur
-        }
-    
-        nodelay(stdscr, FALSE); // permettre de bloquer le prog tant que la touche 'q' n'est pas pressee
-    
-        // affichage des meilleurs scores
-        resultBox = subwin(stdscr, 7, width, 23, 0);
-        box(resultBox, ACS_VLINE, ACS_HLINE);
-    
-        // affichage des scores
-        results(resultBox, (float)elapsed_time, game);
-        wrefresh(resultBox);
-        key = ' ';
-        while (key != 'q' && key != 'Q') // si touche 'q' pressee : arret du jeu
-            key = getch();
-    
-        // liberation de la memoire
-        delwin(resultBox);
-    
-        endwin();
-    
-        LibereDeck(deck);
-    
-        printf("Au revoir !\n");
-
+        Jeu(width);
     }else if (menuChoice == 2){
         clear();
         curs_set(0);
         //autoplayer(width);
+    }else if (menuChoice == 3)
+    {
+        //autoplayer2();
     }
+
+    endwin();
+    printf("Au revoir !\n");
+
     return 0;
 }
