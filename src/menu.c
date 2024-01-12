@@ -52,12 +52,13 @@ int menu(int height, int width)
     wattroff(mainContainer, A_BOLD);
 
     mvwprintw(mainContainer, mainContainerHeight/3+6, 5, "1. Un joueur");
-    mvwprintw(mainContainer, mainContainerHeight/3+8, 5, "2. Autoplayer");
+    mvwprintw(mainContainer, mainContainerHeight/3+8, 5, "2. Autoplayer aleatoire");
+    mvwprintw(mainContainer, mainContainerHeight/3+10, 5, "3. Autoplayer avec memoire");
 
-    mvwprintw(mainContainer, mainContainerHeight/3+12, 5, "Entrez votre choix :");
+    mvwprintw(mainContainer, mainContainerHeight/3+14, 5, "Entrez votre choix :");
 
     do{ // Répéter tant que le choix n'est pas valide
-        wmove(mainContainer,  mainContainerHeight/3+12, 25); // Efface l'entree clavier
+        wmove(mainContainer,  mainContainerHeight/3+14, 25); // Efface l'entree clavier
         wclrtoeol(mainContainer);                            // incorrecte (si erreur de saisie)
 
 
@@ -76,7 +77,7 @@ int menu(int height, int width)
         }
 
         //entree du choix du joueur
-        mvwgetnstr(mainContainer, mainContainerHeight/3+12, 27, choice, 1);
+        mvwgetnstr(mainContainer, mainContainerHeight/3+14, 27, choice, 1);
 
         switch (choice[0]) {
             case '1': // Pour jouer seul
@@ -91,6 +92,9 @@ int menu(int height, int width)
             case 'Q':
                 endwin();
                 return -1;
+            case '3':
+                endwin();
+                return 3;
             default: //Erreur de saisie
                 inputError = true;
         }

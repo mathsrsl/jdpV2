@@ -295,6 +295,7 @@ int CompareCard(Carte *current_focus, Carte *compared,struct timespec start_time
         elapsed_time = CalcElapsed_Time(start_time);
         if(ch == 'q' || ch == 'Q')
             return -1;
+            //-1 est le jeu se ferme
     }
 
     if (compared->var == current_focus->var)

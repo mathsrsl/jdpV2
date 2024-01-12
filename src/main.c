@@ -9,6 +9,7 @@
 #include "../include/score.h"
 #include "../include/autoplayer.h"
 #include "../include/bandeau.h"
+#include "../include/autoplayer2.h"
 
 #include <ncurses.h>
 
@@ -52,7 +53,7 @@ int main(void)
         //autoplayer(width);
     }else if (menuChoice == 3)
     {
-        //autoplayer2();
+        AutoPlayer2();
     }
 
     endwin();

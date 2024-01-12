@@ -6,7 +6,7 @@ BINDIR=./bin
 SRCDIR=./src
 
 # List of object files separated by spaces
-OBJS=$(OBJDIR)/main.o $(OBJDIR)/menu.o $(OBJDIR)/carte.o $(OBJDIR)/score.o $(OBJDIR)/autoplayer.o $(OBJDIR)/bandeau.o
+OBJS=$(OBJDIR)/main.o $(OBJDIR)/menu.o $(OBJDIR)/carte.o $(OBJDIR)/score.o $(OBJDIR)/autoplayer.o $(OBJDIR)/bandeau.o $(OBJDIR)/autoplayer2.o
 
 # Default target
 all: $(BINDIR)/game
