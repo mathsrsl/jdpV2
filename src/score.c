@@ -1,29 +1,41 @@
-#include "../include/score.h"
+#include "score.h"
 
 void filFile(FILE *fichier2, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]){
-        //remplissage avec les score de base
-        fputs("1", fichier2);
-        fputs(" ", fichier2);
-        fputs(nom1, fichier2);
-        fputs(" ", fichier2);
-        fputs(score1, fichier2);
-        fputs("\n", fichier2);
-        fputs("2", fichier2);
-        fputs(" ", fichier2);
-        fputs(nom2, fichier2);
-        fputs(" ", fichier2);
-        fputs(score2, fichier2);
-        fputs("\n", fichier2);
-        fputs("3", fichier2);
-        fputs(" ", fichier2);
-        fputs(nom3, fichier2);
-        fputs(" ", fichier2);
-        fputs(score3, fichier2);
-        fclose(fichier2);
+    /*
+    Fonction : filFile
+    Param : FILE *fichier2, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], 
+            char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],
+            char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]
+    Traitement : Rempli un fichier avec les scores et noms de joueurs
+    Retour :  Aucun
+    */
+    fputs("1", fichier2);
+    fputs(" ", fichier2);
+    fputs(nom1, fichier2);
+    fputs(" ", fichier2);
+    fputs(score1, fichier2);
+    fputs("\n", fichier2);
+    fputs("2", fichier2);
+    fputs(" ", fichier2);
+    fputs(nom2, fichier2);
+    fputs(" ", fichier2);
+    fputs(score2, fichier2);
+    fputs("\n", fichier2);
+    fputs("3", fichier2);
+    fputs(" ", fichier2);
+    fputs(nom3, fichier2);
+    fputs(" ", fichier2);
+    fputs(score3, fichier2);
+    fclose(fichier2);
 }
 
 void filVoidFile(FILE * fichier2, char nom[TAILLE_NOM], char score[TAILLE_SCORE]){
-    //Créé le fichier et le rempli si il n'y a aucun score dedans
+    /*
+    Fonction : filVoidFile
+    Param : FILE * fichier2, char nom[TAILLE_NOM], char score[TAILLE_SCORE]
+    Traitement : Créer un fichier score s'il n'existe pas et le rempli
+    Retour :  Aucun
+    */
     fputs("1", fichier2);
     fputs(" ", fichier2);
     fputs(nom, fichier2);
@@ -34,6 +46,14 @@ void filVoidFile(FILE * fichier2, char nom[TAILLE_NOM], char score[TAILLE_SCORE]
 }
 
 void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]){
+    /*
+    Fonction : displayResults
+    Param : WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE],
+            char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],
+            char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]
+    Traitement : Affiche les scores du fichier
+    Retour :  Aucun
+    */
     wclear(resultBox);
     box(resultBox, ACS_VLINE, ACS_HLINE);
     if(game){
@@ -48,6 +68,14 @@ void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char s
 }
 
 void looseResults(WINDOW * resultBox, bool game){
+    /*
+    Fonction : looseResults
+    Param : WINDOW * resultBox, bool game
+    Traitement : Fonction qui affiche juste les résultats si le joueur appuie 
+                sur q, sans enregistrer le score ou nom du joueur puisqu'il est considéré
+                comme perdant
+    Retour :  Aucun
+    */
     FILE *fichier = NULL;
     fichier = fopen("jeuhighscore.txt","r");
 
@@ -97,6 +125,13 @@ void looseResults(WINDOW * resultBox, bool game){
 }
 
 void winResults(WINDOW * resultBox, float temps, bool game){
+    /*
+    Fonction : winResults
+    Param : WINDOW * resultBox, float temps, bool game
+    Traitement : Fonction qui enregistre le score du joueur comme il a gagné,
+                 modifie les scores du fichier si besoin et affiche les scores
+    Retour :  Aucun
+    */
     FILE *fichier = NULL;
     fichier = fopen("jeuhighscore.txt","r");
 
@@ -181,6 +216,13 @@ void winResults(WINDOW * resultBox, float temps, bool game){
 }
 
 void results(WINDOW * resultBox, float temps, bool game){
+    /*
+    Fonction : results
+    Param : WINDOW * resultBox, float temps, bool gam
+    Traitement : Fonction permet de diviser en fonction de si la partie est
+                 gagnée ou non
+    Retour :  Aucun
+    */
     if(game){
         looseResults(resultBox, game);
     }else{
