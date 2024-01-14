@@ -216,6 +216,4 @@ void autoplayer(int width){
 
         LibereDeck(deck);
         echo();
-
-        printf("Au revoir !\n");
 }
