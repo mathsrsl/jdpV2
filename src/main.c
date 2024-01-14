@@ -55,7 +55,7 @@ int main(void)
         }else if (menuChoice == 2){
             clear();
             curs_set(0);
-            //autoplayer(width);
+            autoplayer(width);
         }else if (menuChoice == 3)
         {
             AutoPlayer2();
