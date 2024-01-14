@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "bandeau.h"
 #include "score.h"
@@ -40,7 +41,7 @@ void LettreAlea(Carte *deck, char lettre[], int taille);
 
 // fonction permettant de prendre les inputs de deplacement, ne prend pas la commande q
 // pour que l'on puisse sortir de la boucle sans avoir a retourner quoi que ce soit
-int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct timespec start_time, char input, bool *br);
+int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct timespec start_time, char input);
 
 // cette fonction va être utilisée seulement quand on deux cartes sont comparée, elle permet
 // de renvoyer les modifications à faire sur les cartes et les variables utilisées

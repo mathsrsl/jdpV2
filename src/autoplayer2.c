@@ -151,4 +151,5 @@ void AutoPlayer2()
     }
 
     LibereDeck(deck);
+    clear();
 }

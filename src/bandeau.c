@@ -5,18 +5,16 @@ void AfficheBandeau(double elapsed_time)
     //static permet de ne pas avoir a les redefinir a chaque appel
     static WINDOW * titleBox = NULL;
     static WINDOW * chronoBox = NULL;
-    if (titleBox == NULL && chronoBox == NULL)
-    {
-        titleBox = subwin(stdscr, 4, 60, 0, 0);
-        chronoBox = subwin(stdscr, 4, 19, 0, 61);
-        
-        box(titleBox, ACS_VLINE, ACS_HLINE);
-        box(chronoBox, ACS_VLINE, ACS_HLINE);
-        
-        // affichage du text
-        mvwprintw(titleBox, 1, 1, "Jeu des paires");
-        mvwprintw(titleBox, 2, 1, "Trouver les paires en un minimum de temps");
-    }
+    
+    titleBox = subwin(stdscr, 4, 60, 0, 0);
+    chronoBox = subwin(stdscr, 4, 19, 0, 61);
+    
+    box(titleBox, ACS_VLINE, ACS_HLINE);
+    box(chronoBox, ACS_VLINE, ACS_HLINE);
+    
+    // affichage du text
+    mvwprintw(titleBox, 1, 1, "Jeu des paires");
+    mvwprintw(titleBox, 2, 1, "Trouver les paires en un minimum de temps");
     
     //L'appel de cette fonction affichera toujours le temps sur l'écran (donc pas besoin de le refaire)
     mvwprintw(chronoBox, 1, 1, "chrono : %.1fs", elapsed_time);

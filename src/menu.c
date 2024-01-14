@@ -152,3 +152,67 @@ void DisplayBanner(WINDOW *container, int posx, int posy)
 
     return;
 }
+
+bool Rejouer()
+{
+    clear();
+
+    bool choix = 1,inputError = 0;
+    int maxx, maxy;
+
+    char input[2];
+
+    getmaxyx(stdscr,maxy,maxx);
+
+    WINDOW * choiceBox = NULL;
+
+    choiceBox = subwin(stdscr,6,20,(int)maxy/2-3,(int)maxx/2-10);
+    wborder(choiceBox,'|','|','-','-',' ',' ',' ',' ');
+
+    border('|','|','-','-',' ',' ',' ',' ');
+
+    mvwprintw(stdscr,(int)(maxy/2)-6,(int)(maxx/2)-10,"Voulez vous rejouer ?");
+
+    do
+    {
+        wmove(choiceBox,4,9);
+        wclrtoeol(choiceBox);
+
+        mvwprintw(choiceBox,1,6,"o - oui");
+        mvwprintw(choiceBox,2,6,"n - non");
+
+        if(inputError){ // Affichage du message d'erreur si erreur de saisie
+            const char *errorText = "Erreur de saisie";
+
+            // Affichage du message d'erreur en gras, souligné et avec fond rouge
+            wattron(stdscr, A_BOLD | A_UNDERLINE | COLOR_PAIR(10));
+            mvwprintw(stdscr,(int) (maxy/2)-4,(int) (maxx/2)-8, "%s", errorText);
+            wattroff(stdscr, A_BOLD | A_UNDERLINE | COLOR_PAIR(10));
+        }
+        
+        refresh();
+
+        mvwgetnstr(choiceBox, 4, 10, input, 1);
+
+        switch(input[0])
+        {
+            case 'o':
+                choix = 1;
+                break;
+            case 'n':
+                choix = 0;
+                break;
+            case 'q':
+                choix = 0;
+                break;
+            default:
+                inputError = 1;
+                break;
+        }
+    }while(input[0] != 'o' && input[0] != 'n' && input[0] != 'q');
+
+    clear();
+    refresh();
+
+    return choix;
+}

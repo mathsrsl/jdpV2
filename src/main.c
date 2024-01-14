@@ -23,6 +23,8 @@ int main(void)
     int width = 80; // 100
     int rows, cols;
 
+    bool continuer = 1;
+
     int menuChoice;
 
     // Erreur terminal trop petit
@@ -34,28 +36,34 @@ int main(void)
         return -1;
     }
 
-    // Afficher le menu du jeu
-    menuChoice = menu(height, width);
 
-    if (menuChoice == -2) {
-        endwin();
-        printf("Erreur, creation de ressource ncurses echoue\n");
-        return -2;
-    } else if (menuChoice == -1) { // Si touche q pressee
-        endwin();
-        printf("Au revoir\n");
-        return 0;
-    }else if(menuChoice == 1){
-        Jeu(width);
-    }else if (menuChoice == 2){
-        clear();
-        curs_set(0);
-        //autoplayer(width);
-    }else if (menuChoice == 3)
+    while(continuer)
     {
-        AutoPlayer2();
-    }
+        // Afficher le menu du jeu
+        menuChoice = menu(height, width);
 
+        if (menuChoice == -2) {
+            endwin();
+            printf("Erreur, creation de ressource ncurses echoue\n");
+            return -2;
+        } else if (menuChoice == -1) { // Si touche q pressee
+            endwin();
+            printf("Au revoir\n");
+            return 0;
+        }else if(menuChoice == 1){
+            Jeu(width);
+        }else if (menuChoice == 2){
+            clear();
+            curs_set(0);
+            //autoplayer(width);
+        }else if (menuChoice == 3)
+        {
+            AutoPlayer2();
+        }
+
+        continuer = Rejouer();
+    }
+    
     endwin();
     printf("Au revoir !\n");
 

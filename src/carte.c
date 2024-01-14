@@ -199,7 +199,7 @@ void LettreAlea(Carte *deck, char lettre[], int taille)
     (deck + 11)->var = *(lettre + 1);
 }
 
-int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct timespec start_time, char input, bool *br)
+int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct timespec start_time, char input)
 {
     /**
      * Fonction : ManageInput
@@ -231,12 +231,10 @@ int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct tim
     {
         // cursorPos = (cursorPos>1) ? cursorPos-1 : 12;
         *current_focus = rechercheCarteAccessible(deck, deck, (deck + TAILLE_DECK - 1), *current_focus, 'g', TAILLE_DECK);
-        return 0;
     }
     else if (input == 'z')
     {
         *current_focus = rechercheCarteAccessible(deck, deck, (deck + TAILLE_DECK - 1), *current_focus, 'd', TAILLE_DECK);
-        return 0;
     }
     else if (input == 'e')
     {
@@ -247,7 +245,6 @@ int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct tim
             // on verifi si current_focus et bien egal a 1 pour eviter que les cartes revelee et bloquee soient debloquable
             *compared = *current_focus;
             *current_focus = rechercheCarteAccessible(deck, deck, (deck + TAILLE_DECK - 1), *current_focus, 'd', TAILLE_DECK);
-            return 0;
         }
         else if (*compared != NULL)
         {
@@ -262,8 +259,7 @@ int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct tim
     else if (input == 'q')
     {
         // quitter avant la fin du timer
-        *br = 0;
-        return 0;
+        return -1;
     }
 
     return 0;
@@ -330,7 +326,7 @@ Carte *CreationDeck()
 
     if (deck != NULL)
     {
-        LettreAlea(deck, lettre, TAILLE_DECK); // affecte au carte des valeurs char aleatoire (il y a forcement des paires)
+        LettreAlea(deck, lettre, TAILLE_DECK); // affecte au carte des valeurs char aleatoire
         for (int i = 0; i < TAILLE_DECK; i++)
         {
             // initialisation des attributs pour ne pas avoir de mauvaise suprise de valeur trop haute
@@ -338,6 +334,9 @@ Carte *CreationDeck()
             (deck + i)->X = PosCardX(i);
             (deck + i)->Y = PosCardY(i);
         }
+    }else{
+        fprintf(stderr,"Erreur : la creation du tableau n'a pas pu etre faites.");
+        exit(-3);
     }
 
     return deck;
@@ -434,6 +433,7 @@ Carte *rechercheCarteAccessible(Carte *deck, Carte *debut, Carte *fin, Carte *cu
 void Jeu(int width)
 {
     /**Description à ajouter*/
+    
     /* ------------------ Affichage du jeu ------------------ */
     
         // Initialisation de la fenetre
@@ -449,15 +449,15 @@ void Jeu(int width)
         Carte *current_focus = &deck[0];            // pointeur permettant de savoir quel carte est focus
         Carte *compared = NULL;                     // pointeur qui sera initialisee seulement si une carte est selectionnee
 
-        bool game = 1, sortir = 1;                      // permet de savoir la personne a trouvée toute les paires, br permet de sortir de la boucle avec le la touche 'q'
-        bool freezeInput = 1;                       // permet de savoir si l'on doit bloquer tout deplacement
+        bool game = 1;
         int count = 0;
+        int sortir = 1;                      // permet de savoir la personne a trouvée toute les paires, br permet de sortir de la boucle avec le la touche 'q'
+        int buffer = 0;
     
         WINDOW *resultBox; // Initialisation des fenetres
     
         // Initialisation des variables
-        int key;
-        int cursorPos = 1;
+        char key = ' ';
         double elasped_time = 0; 
     
         struct timespec start_time;
@@ -474,7 +474,7 @@ void Jeu(int width)
         clock_gettime(CLOCK_REALTIME, &start_time);
     
         // DisplayCard();
-        while (sortir)
+        while(sortir)
         {
             if (count == 6)
             {
@@ -483,20 +483,25 @@ void Jeu(int width)
             }
 
             elasped_time = CalcElapsed_Time(start_time);
-            if ( elasped_time >= 120) // a envlever ?
-                break;
+            //if ( elasped_time >= 120) // a envlever ?
+                //break;
     
             // savoir si il faut bloquer la récuperation d'input ou s'il faut continuer à les lires
             // la fonction ne permet pas de se déplacer, l'index est trouvée mais le pointeur n'est pas modifé
-            count += ManageInput(deck, &compared, &current_focus,start_time, key, &sortir);
+            buffer = ManageInput(deck, &compared, &current_focus,start_time, key);
+            if(buffer == -1)
+                sortir = 0;
+            else
+                count+=buffer;
             //mvwprintw(stdscr, 25, 25, "current focus : %p,count :%d", compared,count);
-
+            
             // recupère les inputs
             key = getch();
-
+            //mvwprintw(stdscr,20,0,"key : %c,sortir : %d,count : %d,game : %d,buffer : %d",key,sortir,count,game,buffer);
+            refresh();
             usleep(65000); // arret de 70ms pour alléger le processeur
         }
-    
+
         nodelay(stdscr, FALSE); // permettre de bloquer le prog tant que la touche 'q' n'est pas pressee
     
         // affichage des meilleurs scores
@@ -509,8 +514,14 @@ void Jeu(int width)
         key = ' ';
         while (key != 'q' && key != 'Q') // si touche 'q' pressee : arret du jeu
             key = getch();
-    
         // liberation de la memoire
+        
         delwin(resultBox);
         LibereDeck(deck);
+
+        echo();
+        curs_set(1);
+        nodelay(stdscr, TRUE);
+
+        clear();
 }
