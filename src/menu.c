@@ -155,6 +155,16 @@ void DisplayBanner(WINDOW *container, int posx, int posy)
 
 int Rejouer()
 {
+    /**
+     * Fonction : Rejouer
+     * Param : Aucun paramètre
+     * Traitement : Cette fonction marche comme le menu de base, elle sera seulement affichée après une partie et demandera au joueur
+     *              si il veut refaire une partie dans ce mode de jeu ou si il veut changer de mode de jeu (donc revenir au menu) ou
+     *              quitter le jeu.
+     * Retour : Cette fonction ne peut retourne que 3 valeur : 2, 1 ou 0. 2 signifie que le joueur veut rejouer au même mode de jeu,
+     *          1 signifie que le joueur veut retourner au menu principale et 0 signifie que le joueur ne veut plus jouer au jeu et
+     *          donc veut le quitter.
+    */
     clear();
 
     int choix = 1;

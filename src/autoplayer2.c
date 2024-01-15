@@ -2,6 +2,19 @@
 
 int CompareCardAutoPlayer(Carte * deck,int indexCardA,int indexCardB,struct timespec start_time,double lastT)
 {
+    /**
+     * Fonction : CompareCardAutoPlayer
+     * Param : 
+     *      - deck : pointeur de structure Carte contenant les 12 cartes du jeu
+     *      - indexCardA, indexCardB: Cet entier permet de savoir quel carte on doit comparer avec la deuxième carte en utilisant leur index
+     *      - start_time : une structure contenant le temps en seconde et nanoseconde de quand le mode de jeu a été lancé
+     *      - lastT : contient le temps en seconde et nanoseconde qu'il était avant l'appel de cette fonction
+     * Traitement : Cette fonction est spécifique à l'autoplayer, dans un premier temps cette fonction va utiliser la fonction CalcElapsed_Time
+     *              pour savoir quand les 2 secondes de comparaison sont passé (tout en affichant le temps qui passe), dans cette boucle on vérifie
+     *              si la touche q n'est pas préssée pour arrêter l'autoplayer. Enfin une fois le décompte fini on regarde si a l'index A et B
+     *              du deck si ces deux cartes ont la même valeur au niveau de leur lettre.
+     * Retour : Cette fonction retourne 1 si les cartes sont des paires, 0 si elles ne le sont pas et 3 si le joueur veut quitter le mode de jeu.
+    */
     /*comparera les cartes jsp comment*/
     bool estPaire = 0;
     double elapsed_time = CalcElapsed_Time(start_time);
