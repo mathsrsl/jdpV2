@@ -153,11 +153,12 @@ void DisplayBanner(WINDOW *container, int posx, int posy)
     return;
 }
 
-bool Rejouer()
+int Rejouer()
 {
     clear();
 
-    bool choix = 1,inputError = 0;
+    int choix = 1;
+    bool inputError = 0;
     int maxx, maxy;
 
     char input[2];
@@ -166,20 +167,21 @@ bool Rejouer()
 
     WINDOW * choiceBox = NULL;
 
-    choiceBox = subwin(stdscr,6,20,(int)maxy/2-3,(int)maxx/2-10);
+    choiceBox = subwin(stdscr,6,30,(int)maxy/2-3,(int)maxx/2-15);
     wborder(choiceBox,'|','|','-','-',' ',' ',' ',' ');
 
     border('|','|','-','-',' ',' ',' ',' ');
 
-    mvwprintw(stdscr,(int)(maxy/2)-6,(int)(maxx/2)-10,"Voulez vous rejouer ?");
+    mvwprintw(stdscr,(int)(maxy/2)-6,(int)(maxx/2)-17,"Voulez-vous rejouer a ce mode de jeu ?");
 
     do
     {
-        wmove(choiceBox,4,9);
+        wmove(choiceBox,4,14);
         wclrtoeol(choiceBox);
 
-        mvwprintw(choiceBox,1,6,"o - oui");
-        mvwprintw(choiceBox,2,6,"n - non");
+        mvwprintw(choiceBox,1,6,"o - recommencer");
+        mvwprintw(choiceBox,2,6,"q - quitter le jeu");
+        mvwprintw(choiceBox,3,6,"m - retourner au menu");
 
         if(inputError){ // Affichage du message d'erreur si erreur de saisie
             const char *errorText = "Erreur de saisie";
@@ -192,15 +194,15 @@ bool Rejouer()
         
         refresh();
 
-        mvwgetnstr(choiceBox, 4, 10, input, 1);
+        mvwgetnstr(choiceBox, 4, 15, input, 1);
 
         switch(input[0])
         {
             case 'o':
-                choix = 1;
+                choix = 2;
                 break;
-            case 'n':
-                choix = 0;
+            case 'm':
+                choix = 1;
                 break;
             case 'q':
                 choix = 0;
@@ -209,7 +211,7 @@ bool Rejouer()
                 inputError = 1;
                 break;
         }
-    }while(input[0] != 'o' && input[0] != 'n' && input[0] != 'q');
+    }while(input[0] != 'o' && input[0] != 'm' && input[0] != 'q');
 
     clear();
     refresh();

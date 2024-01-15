@@ -519,9 +519,5 @@ void Jeu(int width)
         delwin(resultBox);
         LibereDeck(deck);
 
-        echo();
-        curs_set(1);
-        nodelay(stdscr, TRUE);
-
         clear();
 }

@@ -8,6 +8,6 @@ int menu(int height, int width);
 // Fonction permettant d'afficher la banniere du jeu dans une fenetre et aux coordonnées données
 void DisplayBanner(WINDOW *mainContainer, int posx, int posy);
 
-bool Rejouer();
+int Rejouer();
 
 #endif //JDPV2_MENU_H

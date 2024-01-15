@@ -23,7 +23,7 @@ int main(void)
     int width = 80; // 100
     int rows, cols;
 
-    bool continuer = 1;
+    int continuer = 1;
 
     int menuChoice;
 
@@ -37,11 +37,12 @@ int main(void)
     }
 
 
-    while(continuer)
+    while(continuer != 0)
     {
         // Afficher le menu du jeu
-        menuChoice = menu(height, width);
-
+        if(continuer == 1)
+            menuChoice = menu(height, width);
+            
         if (menuChoice == -2) {
             endwin();
             printf("Erreur, creation de ressource ncurses echoue\n");
@@ -60,6 +61,10 @@ int main(void)
         {
             AutoPlayer2();
         }
+
+        echo();
+        curs_set(1);
+        nodelay(stdscr, TRUE);
 
         continuer = Rejouer();
     }
