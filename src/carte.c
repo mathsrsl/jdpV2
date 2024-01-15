@@ -36,7 +36,7 @@ void DisplayCard(Carte *c, int longeur, int largeur)
     case 0:
         wborder(c->carte, '|', '|', '-', '-', ' ', ' ', ' ', ' ');
         wbkgd(c->carte, COLOR_PAIR(3));
-        mvwprintw(c->carte,3,5,"%c",c->var);
+        //mvwprintw(c->carte,3,5,"%c",c->var);
         // mvwprintw(c->carte,4,5,"%d",c->etat);
         break;
     case 1:
@@ -336,7 +336,7 @@ Carte *CreationDeck()
         }
     }else{
         fprintf(stderr,"Erreur : la creation du tableau n'a pas pu etre faites.");
-        exit(-3);
+        exit(-4);
     }
 
     return deck;
@@ -432,7 +432,15 @@ Carte *rechercheCarteAccessible(Carte *deck, Carte *debut, Carte *fin, Carte *cu
 
 void Jeu(int width)
 {
-    /**Description à ajouter*/
+    /**
+     * Fonction : Jeu
+     * Param : 
+     *      - width : la largeur minimal du terminal
+     * Traitement : Cette fonction met en place le jeu de base, elle initialise les varaibles dont on aura besoin pour jouer au jeu 
+     *              comme les pointeurs (deck, current_focus pour savoir ou l'on se trouve dans le jeu et compared). Elle contient aussi
+     *              la boucle de jeu et l'appel des fonctions de déplacement, calcule de temps et écriture du score.
+     * Retour : Cette fonction ne retourne pas de valeur
+    */
     
     /* ------------------ Affichage du jeu ------------------ */
     
@@ -518,10 +526,6 @@ void Jeu(int width)
         
         delwin(resultBox);
         LibereDeck(deck);
-
-        echo();
-        curs_set(1);
-        nodelay(stdscr, TRUE);
 
         clear();
 }

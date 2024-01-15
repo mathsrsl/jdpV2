@@ -4,7 +4,7 @@
 
 **Compiler :**
 ```shell
-gcc -o game main.c menu.c carte.c score.c autoplayer.c -lncurses -Wall
+gcc -o game main.c menu.c carte.c score.c autoplayer.c autoplayer2.c bandeau.c -lncurses -Wall
 ```
 Or
 ```shell
@@ -71,7 +71,7 @@ mvwgetnstr(mainContainer, positionX, positionY, input, 3);
 ## Avant de rendre 
 
 - Cacher les valeurs des cartes
-- Enlever l'affichage des touches préssées dans la chronoBox
+- Enlever l'affichage des touches pressées dans la chronoBox
 - Commenter le code
 
 Arborescence de rendu :
