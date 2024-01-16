@@ -3,9 +3,10 @@
 void filFile(FILE *fichier2, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]){
     /*
     Fonction : filFile
-    Param : FILE *fichier2, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], 
-            char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],
-            char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]
+    Param : 
+        - fichier2 : fichier à remplir
+        - nom1[TAILLE_NOM], nom2[TAILLE_NOM], nom3[TAILLE_NOM] : noms des 3 meilleurs joueurs
+        - score1[TAILLE_SCORE], score2[TAILLE_SCORE], score3[TAILLE_SCORE] : scores des 3 meilleurs joueurs
     Traitement : Rempli un fichier avec les scores et noms de joueurs
     Retour :  Aucun
     */
@@ -32,7 +33,9 @@ void filFile(FILE *fichier2, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], c
 void filVoidFile(FILE * fichier2, char nom[TAILLE_NOM], char score[TAILLE_SCORE]){
     /*
     Fonction : filVoidFile
-    Param : FILE * fichier2, char nom[TAILLE_NOM], char score[TAILLE_SCORE]
+    Param :
+        - fichier2 : fichier à remplir
+        - nom[TAILLE_NOM], score[TAILLE_SCORE] : informations du nouveau meilleur joueur
     Traitement : Créer un fichier score s'il n'existe pas et le rempli
     Retour :  Aucun
     */
@@ -48,9 +51,11 @@ void filVoidFile(FILE * fichier2, char nom[TAILLE_NOM], char score[TAILLE_SCORE]
 void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]){
     /*
     Fonction : displayResults
-    Param : WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE],
-            char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],
-            char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]
+    Param : 
+        - resultBox : fenêtre pour afficher les résultats
+        - game : booléen pour savoir si la partie est remportée ou perdu 
+        - nom1[TAILLE_NOM], nom2[TAILLE_NOM], nom3[TAILLE_NOM] : noms des 3 meilleurs joueurs
+        - score1[TAILLE_SCORE], score2[TAILLE_SCORE], score3[TAILLE_SCORE] : scores des 3 meilleurs joueurs
     Traitement : Affiche les scores du fichier
     Retour :  Aucun
     */
@@ -70,7 +75,9 @@ void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char s
 void looseResults(WINDOW * resultBox, bool game){
     /*
     Fonction : looseResults
-    Param : WINDOW * resultBox, bool game
+    Param : 
+        - resultBox : fenêtre pour afficher les résultats
+        - game : booléen pour savoir si la partie est remportée ou perdu 
     Traitement : Fonction qui affiche juste les résultats si le joueur appuie 
                 sur q, sans enregistrer le score ou nom du joueur puisqu'il est considéré
                 comme perdant
@@ -127,7 +134,10 @@ void looseResults(WINDOW * resultBox, bool game){
 void winResults(WINDOW * resultBox, float temps, bool game){
     /*
     Fonction : winResults
-    Param : WINDOW * resultBox, float temps, bool game
+    Param : 
+        - resultBox : fenêtre pour afficher les résultats
+        - temps : temps du joueur qui vient de jouer au jeu
+        - game : booléen pour savoir si la partie est remportée ou perdu 
     Traitement : Fonction qui enregistre le score du joueur comme il a gagné,
                  modifie les scores du fichier si besoin et affiche les scores
     Retour :  Aucun
@@ -218,7 +228,10 @@ void winResults(WINDOW * resultBox, float temps, bool game){
 void results(WINDOW * resultBox, float temps, bool game){
     /*
     Fonction : results
-    Param : WINDOW * resultBox, float temps, bool gam
+    Param :
+        - resultBox : fenêtre pour afficher les résultats
+        - temps : temps du joueur qui vient de jouer au jeu
+        - game : booléen pour savoir si la partie est remportée ou perdu
     Traitement : Fonction permet de diviser en fonction de si la partie est
                  gagnée ou non
     Retour :  Aucun
