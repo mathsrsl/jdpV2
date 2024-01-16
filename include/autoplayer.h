@@ -13,11 +13,12 @@
 #define LARGEUR 11
 #define TAILLE_DECK 12
 
-void autoplayer(int width);
-
 void displayGameAuto (Carte *deck, Carte *compared1, Carte *compared2, int TAILLE);
 
-double timer(double elapsed_time, WINDOW *chronoBox, struct timespec start_time, struct timespec current_time);
+void endGame (Carte *deck, float elapsed_time, bool game, int width);
 
+int compare(Carte *compared1, Carte *compared2, Carte *deck, int count);
+
+void autoplayer(int width);
 
 #endif // AUTOPLAYER_H_INCLUDED
