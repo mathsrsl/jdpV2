@@ -209,34 +209,30 @@ int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct tim
      *                   à comparer.
      *      - current_focus : un pointeur de pointeur de structure Carte contenant la carte
      *                        où se trouve l'utilisateur dans le deck.
-     *      - freezeInput : un pointeur de booléen premettant de savoir si il faut arrêter de prendre les inputs ou continuer
-     *      - elapsed_time : un pointeur de double permettant d'avoir le temps qui est passé depuis le début du jeu
-     *      - chronoCompare : un pointeur de double, sa valeur est a 0 par défaut et a l'issue de cette fonction il pourra
-     *                        prendre la valeur de elapsed_time ou restera à 0.
-     *      - input : un char qui prend comme valeur l'input fait par l'utilisateur (key dans le main)
-     *      - br : un pointeur de booléen qui est seulement utile pour faire marcher la touche 'q'
+     *      - start_time : une structure contenant le temps en seconde et nanoseconde de quand le mode de jeu à été lancé.
+     *      - input : permet de savoir quel touche a été appuyé par l'utilisateur.
      * Traitement : La fonction va d'abord appeler la fonction DisplayCardPtr pour afficher les cartes en fonction des pointeurs
      *              et du deck, par la suite elle va regarder les inputs faits et déplacera le pointeur current_focus à droite ou 
-     *              à gauche dans le deck si 'a' ou 'z' sont pressés, sinon si 'e' est pressé alors il regarde si comparede vaut NULL
-     *              pour savoir si une carte est comparée pour savoir si il faut arrêter de prendre les inputs (donc modifier la valeur
-     *              du pointeur freezeInput) ou si il faut simplement décaler current_focus et continuer le jeu. Si il faut comparer deux
-     *              cartes elles prendront comme état 2 et le freezeInput sera égal à 0.
-     * Retour : aucune valeur de retour.
+     *              à gauche dans le deck si 'a' ou 'z' sont pressés. Si 'e' est pressé alors elle regarde si compared est égal à NULL
+     *              pour savoir si une carte est comparée pour savoir si il faut comparer ces deux cartes ou si il faut simplement
+     *              décaler current_focus et séléctonnier la carte ou était current_foucs avec compared.
+     * Retour : Si un input (comme aucun) est fait alors la fonction retourne 0,si deux cartes sont comparé alors on retourne la valeur que
+     *          retourne CompareCard (si ces cartes sont une paire ou si le joueur veut quitter le jeu).
      */
     // besoin de cette fonction ici pour que les cartes comparee ne changent pas de couleur
     // pendant les 2 secondes de delais
     DisplayCardPtr(deck, *current_focus, *compared, TAILLE_DECK);
     // mvwprintw(stdscr, 26, 25, "temp : %c", input);
-    if (input == 'a')
+    if (input == 'a' || input == 'A')
     {
         // cursorPos = (cursorPos>1) ? cursorPos-1 : 12;
         *current_focus = rechercheCarteAccessible(deck, deck, (deck + TAILLE_DECK - 1), *current_focus, 'g', TAILLE_DECK);
     }
-    else if (input == 'z')
+    else if (input == 'z' || input == 'Z')
     {
         *current_focus = rechercheCarteAccessible(deck, deck, (deck + TAILLE_DECK - 1), *current_focus, 'd', TAILLE_DECK);
     }
-    else if (input == 'e')
+    else if (input == 'e' || input == 'E')
     {
         // on regarde si le pointeur de comparaison est vide ou si l'état de la carte séléctionnée n'est pas 3 (donc problème)
         if (*compared == NULL && (*current_focus)->etat != 3)
@@ -256,7 +252,7 @@ int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct tim
             return count;
         }
     }
-    else if (input == 'q')
+    else if (input == 'q' || input == 'Q')
     {
         // quitter avant la fin du timer
         return -1;
@@ -272,15 +268,12 @@ int CompareCard(Carte *current_focus, Carte *compared,struct timespec start_time
      * Param : 
      *      - current_focus : un pointeur de pointeur de structure Carte permettant de savoir ou l'on se trouve dans le deck
      *      - compared : un pointeur de pointeur de structure Carte permettant de savoir quel carte séléctionnée pour être comparée
-     *      - freezeInput : un pointeur de booléen permttant de savoir si l'on doit prendre les inputs ou non
-     *      - chronoCompare : un pointeur de double utilisé pour l'attente de 2 secondes pour la comparaison des cartes
-     *      - count : un pointeur d'entier permetttant de savoir si toutes les paires ont été trouvées
-     * Traitement : Cette fonction fait la comparaison entre current_focus et compared pour savoir si ces deux cartes ont la même lettre
-     *              dans ce cas là il faudra les bloquer (état 3) et laisser current_focus a l'indice de la cartes que l'on a comparé
-     *              dans le cas contraire compared sera égal à NULL l'autre current_focus quand on reviendra dans la fonction ManageInput
-     *              prendra son état et couleur de base. Cette fonction est appelée seulement quand deux cartes sont comparées, donc
-     *              seulement quand freezeInput est égal à 0.
-     * Retour : aucune valeur de retour.
+     *      - start_time : une structure contenant le temps en seconde et en nanoseconde de quand le jeu a été lancé.
+     *      - chronoCompare : un double permettant de savoir quel seconde nous devons  retirer au temps actuel pour avoir le stop de 2 secondes.
+     * Traitement : Cette fonction va d'abord récuperer le temps écoulé dans elapsed_time grâce à la fonction CalcElapsed_Time, grâce à cela elle
+     *              va pouvoir faire le temps d'attente avant de valider ou non si les cartes sont des paires. Dans la boucle d'attente la fonction 
+     *              peut être quittée si la touche q et appuyé.
+     * Retour : la fonction retourne -1 si q est pressé, 1 si les carets sont des paires et 0 si les cartes ne sont pas des paires.
     */
 
     double elapsed_time = CalcElapsed_Time(start_time);
