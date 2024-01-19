@@ -16,7 +16,7 @@ int results(WINDOW * resultBox, float temps, bool game,int mode);
 
 //fonctions en fonction de game
 int winResults(WINDOW * resultBox, float temps, bool game);
-void looseResults(WINDOW * resultBox, bool game,int mode);
+int looseResults(WINDOW * resultBox, bool game,int mode);
 
 //affiche simplement les resultats a la fin du jeu,
 //perdu ou gagné
