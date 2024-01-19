@@ -13,7 +13,10 @@ int CompareCardAutoPlayer(Carte * deck,int indexCardA,int indexCardB,struct time
      *              pour savoir quand les 2 secondes de comparaison sont passé (tout en affichant le temps qui passe), dans cette boucle on vérifie
      *              si la touche q n'est pas pressé pour arrêter l'autoplayer. Enfin une fois le décompte fini on regarde si a l'index A et B
      *              du deck si ces deux cartes ont la même valeur au niveau de leur lettre.
-     * Retour : Cette fonction retourne 1 si les cartes sont des paires, 0 si elles ne le sont pas et 3 si le joueur veut quitter le mode de jeu.
+     * Retour :
+     *      - 1 : si les cartes sont des paires
+     *      - 0 : si les cartes ne sont pas des paires
+     *      - 3 : si le joueur veut quitter le jeu
     */
     /*comparera les cartes jsp comment*/
     bool estPaire = 0;
@@ -31,6 +34,8 @@ int CompareCardAutoPlayer(Carte * deck,int indexCardA,int indexCardB,struct time
     {
         ch = getch();
         elapsed_time = CalcElapsed_Time(start_time);
+
+        //on verifie les inputs pour savoir si le joueur ne tente pas de quitter le jeu.
         if(ch == 'q' || ch == 'Q') 
             return 3;
     }
@@ -71,8 +76,11 @@ int SearchLetter(char letterFound[],int index_current,bool mode)
      *              sinon elle retourne -1. Si la fonction est en mode 0 alors elle va chercher la prochaine carte 
      *              inconnue (la carte dans letterFound ou il y a un espace au lieu d'une lettre) et retourner son
      *              index.
-     * Retour : en mode 1 elle retourne -1 ou un index de paire connue avec la carte à l'index_current, en mode 0
-     *          elle retourne la carte inconnue la plus proche de index_current.
+     * Retour : 
+     *      - en mode 1 :
+     *              - -1 si la lettre à l'index_current dans letterFound n'a pas de paire connue dans ce même tableau
+     *              - sinon l'index de la carte étant la paire connue de la lettre à l'index_current dans letterFound
+     *      - en mode 0 : l'index de la carte inconnue dans letterFound la plus proche
     */
     if(mode)
     {
@@ -91,11 +99,12 @@ int SearchLetter(char letterFound[],int index_current,bool mode)
     } 
 }
 
-void AutoPlayer2()
+void AutoPlayer2(int width)
 {
     /**
      * Fonction : AutoPlayer2
-     * Param : Aucun paramètre pour cette fonction.
+     * Param : 
+     *      - width : un entier représentant la largeur du jeu
      * Traitement : Cette fonction, comme le jeu de base, contient toute les initialisations dont l'algorithme a besoin
      *              pour jouer au jeu, la logique de l'algorithme est la suivante : on utilise un tableau (allLetterKnown)
      *              pour se rappeler de toute les lettres que l'on selectionne, l'algorithme commence à l'index 0 du deck séléctionne cette carte
@@ -104,9 +113,11 @@ void AutoPlayer2()
      *              et à les stocker dans le talbeau. Si une carte a une paire connue, donc si index_occur n'est pas égal à -1, alors l'algorithme va
      *              prioriser la comparaison de ces deux cartes, pour se faire il regarde toujours après la première séléction d'une carte et après la 
      *              comparaison de deux cartes pour savoir si l'une des deux n'aurait pas de paire connue (si elles ne sont pas des paires). De cette manière
-     *              on s'assure qu'au bout de la 12 ème cartes que le jeu est fini.              
+     *              on s'assure qu'au bout de la 12 ème cartes que le jeu est fini. 
+     *              L'autoplayer 2 ne modifie pas les fichiers score pour éviter d'avoir un fichier score rempli d'autoplayer.
      * Retour : Aucune valeur de retour.
     */
+
     clear();
     nodelay(stdscr, TRUE);
     curs_set(0); 
@@ -193,6 +204,28 @@ void AutoPlayer2()
         refresh();
     }
 
+    AfficheScore(width,estPaire);
+
     LibereDeck(deck);
-    clear();
+}
+
+void AfficheScore(int width,int quitter)
+{
+    WINDOW *resultBox = NULL;
+    char key= ' ';
+
+    // affichage des meilleurs scores
+    resultBox = subwin(stdscr, 7, width, 23, 0);
+    box(resultBox, ACS_VLINE, ACS_HLINE);
+
+    // affichage des scores
+    if(quitter != 3)
+        results(resultBox,0.0,1,3);
+    else
+        results(resultBox,0.0,1,0);
+    wrefresh(resultBox);
+    key = ' ';
+    while (key != 'q' && key != 'Q') // si touche 'q' pressee : arret du jeu
+        key = getch();
+
 }

@@ -48,7 +48,7 @@ void filVoidFile(FILE * fichier2, char nom[TAILLE_NOM], char score[TAILLE_SCORE]
     fclose(fichier2);
 }
 
-void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]){
+void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],char nom3[TAILLE_NOM], char score3[TAILLE_SCORE],int mode){
     /*
     Fonction : displayResults
     Param : 
@@ -61,7 +61,7 @@ void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char s
     */
     wclear(resultBox);
     box(resultBox, ACS_VLINE, ACS_HLINE);
-    if(game){
+    if(game && mode != 3){
         mvwprintw(resultBox, 1, 1, "DEFAITE");
     }else{
         mvwprintw(resultBox, 1, 1, "VICTOIRE");
@@ -72,7 +72,7 @@ void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char s
     mvwprintw(resultBox, 5, 1, "3 %s %s", nom3, score3);
 }
 
-void looseResults(WINDOW * resultBox, bool game){
+void looseResults(WINDOW * resultBox, bool game,int mode){
     /*
     Fonction : looseResults
     Param : 
@@ -128,7 +128,7 @@ void looseResults(WINDOW * resultBox, bool game){
         }
         c = fgetc(fichier);
     }
-    displayResults(resultBox, game, nom1, score1, nom2, score2, nom3, score3);
+    displayResults(resultBox, game, nom1, score1, nom2, score2, nom3, score3,mode);
 }
 
 void winResults(WINDOW * resultBox, float temps, bool game){
@@ -221,11 +221,11 @@ void winResults(WINDOW * resultBox, float temps, bool game){
         }
         fichier = fopen("jeuhighscore.txt","w+");
         filFile(fichier, nom1, score1, nom2, score2, nom3, score3);
-        displayResults(resultBox, game, nom1, score1, nom2, score2, nom3, score3);
+        displayResults(resultBox, game, nom1, score1, nom2, score2, nom3, score3,0);
     }
 }
 
-void results(WINDOW * resultBox, float temps, bool game){
+void results(WINDOW * resultBox, float temps, bool game,int mode){
     /*
     Fonction : results
     Param :
@@ -237,7 +237,7 @@ void results(WINDOW * resultBox, float temps, bool game){
     Retour :  Aucun
     */
     if(game){
-        looseResults(resultBox, game);
+        looseResults(resultBox, game,mode);
     }else{
         winResults(resultBox, temps, game);
     }

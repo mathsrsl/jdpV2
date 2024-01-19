@@ -53,7 +53,7 @@ void endGame (Carte *deck, float elapsed_time, bool game, int width){
     box(resultBox, ACS_VLINE, ACS_HLINE);
 
     // affichage des scores
-    results(resultBox, elapsed_time, game);
+    results(resultBox, elapsed_time, game,0);
     wrefresh(resultBox);
     int key = ' ';
     while (key != 'q' && key != 'Q')
@@ -192,5 +192,5 @@ void autoplayer(int width){
                 br = 0;
             }
         }
-    endGame (deck, (float)elapsed_time, game, width);
+    endGame (deck, (float)elapsed_time-2.0, game, width);
 }

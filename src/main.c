@@ -59,14 +59,14 @@ int main(void)
             autoplayer(width);
         }else if (menuChoice == 3)
         {
-            AutoPlayer2();
+            AutoPlayer2(width);
         }
 
         echo();
         curs_set(1);
         nodelay(stdscr, TRUE);
 
-        continuer = Rejouer();
+        continuer = Rejouer(width,height);
     }
     
     endwin();

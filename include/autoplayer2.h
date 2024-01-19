@@ -8,12 +8,15 @@
 
 #include "carte.h"
 #include "bandeau.h"
+#include "score.h"
 
 //Cette fonction permet de comparer les cartes pour l'auto player
 int CompareCardAutoPlayer(Carte * deck,int indexCardA,int indexCardB,struct timespec start_time,double lastT);
 //Cette fonction permet de savoir si une lettre est déjà connue en mode 1, permet de trouver le prochain endroit libre en mode 0
 int SearchLetter(char letterFound[],int index_current,bool mode);
 //Cette fonction contient tout pour l'autop
-void AutoPlayer2();
+void AutoPlayer2(int width);
+//Cette fonction permet d'afficher les scores
+void AfficheScore(int width,int quitter);
 
 #endif //AUTOPLAYER2_H_INCLUDED

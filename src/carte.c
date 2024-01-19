@@ -6,9 +6,8 @@ void AttributsInit(Carte *c, unsigned int etat)
      * Fonction : AttributsInit
      * Param :
      *      - c : la carte a modifier
-     *      - etat : entier qui modifiera la carte
-     * Traitement : la fonction change l'etat de la carte qui lui est donnée en parametère
-     *              cela permet de savoir si si la carte est focus,comparée ou trouvée.
+     *      - etat : entier entre 0 et 3
+     * Traitement : la fonction change l'etat de la carte qui lui est donnée en parametère.
      * Retour : aucune valeur de retour
      */
     c->etat = etat;
@@ -158,6 +157,8 @@ int PosCardX(int numCard)
         return 61;
         break;
     }
+    
+    return 0;
 }
 
 void LettreAlea(Carte *deck, char lettre[], int taille)
@@ -216,8 +217,10 @@ int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct tim
      *              à gauche dans le deck si 'a' ou 'z' sont pressés. Si 'e' est pressé alors elle regarde si compared est égal à NULL
      *              pour savoir si une carte est comparée pour savoir si il faut comparer ces deux cartes ou si il faut simplement
      *              décaler current_focus et séléctonnier la carte ou était current_foucs avec compared.
-     * Retour : Si un input (comme aucun) est fait alors la fonction retourne 0,si deux cartes sont comparé alors on retourne la valeur que
-     *          retourne CompareCard (si ces cartes sont une paire ou si le joueur veut quitter le jeu).
+     * Retour : 
+     *      - 0 si aucun input est fait
+     *      - valeur de count si une comparaison est faites 
+     *      - -1 si le joueur veut quitter le jeu
      */
     // besoin de cette fonction ici pour que les cartes comparee ne changent pas de couleur
     // pendant les 2 secondes de delais
@@ -273,7 +276,10 @@ int CompareCard(Carte *current_focus, Carte *compared,struct timespec start_time
      * Traitement : Cette fonction va d'abord récuperer le temps écoulé dans elapsed_time grâce à la fonction CalcElapsed_Time, grâce à cela elle
      *              va pouvoir faire le temps d'attente avant de valider ou non si les cartes sont des paires. Dans la boucle d'attente la fonction 
      *              peut être quittée si la touche q et appuyé.
-     * Retour : la fonction retourne -1 si q est pressé, 1 si les carets sont des paires et 0 si les cartes ne sont pas des paires.
+     * Retour : 
+     *      - 1 si les cartes sont des paires
+     *      - 0 si les cartes ne sont pas des paires
+     *      - -1 si le joueur veut quitter le jeu
     */
 
     double elapsed_time = CalcElapsed_Time(start_time);
@@ -305,7 +311,7 @@ Carte *CreationDeck()
      * Param : aucun paramètres
      * Traitement : Cette fonction commence par créer un tableau dynamiquement avec un calloc de taille TAILLE_DECK
      *              qui est un define dans le fichier carte.h (la taille étant de 12). Par la suite elle créé un tableau
-     *              de lettre contenant les paires qui va être utilisé pour donner à chaque carte du deck une lettre grâce à
+     *              de lettre contenant les paires qui vont être utilisées pour donner à chaque carte du deck une lettre aléatoire grâce à
      *              la fonction LettreAlea() et enfin les positions X et Y grâce au fonction PosCardX et PosCardY des Cartes 
      *              et leur états sont initisalisés grâce à une boucle for.
      * Retour : la fonction retourne le pointeur deck pour pouvoir l'utiliser dans le main comme dans d'autre fichier.
@@ -328,6 +334,7 @@ Carte *CreationDeck()
             (deck + i)->Y = PosCardY(i);
         }
     }else{
+        endwin();
         fprintf(stderr,"Erreur : la creation du tableau n'a pas pu etre faites.");
         exit(-4);
     }
@@ -359,17 +366,12 @@ Carte *rechercheCarteAccessible(Carte *deck, Carte *debut, Carte *fin, Carte *cu
      *                        dans le deck
      *      - direction : un char qui peut prendre deux valeurs 'g' ou 'd' représentant respéctivement : gauche et droite
      *      - TAILLE :  un entier contenant la taille du deck
-     * Traitement : Cette fonction va d'abord regarder dans quel sens elle doit itérer dans le tableau en fonction
-     *              de la variable direction, une fois cela fait elle rentre dans une boucle while, ayant pour condition 
-     *              que le pointeur de structure Carte val_return soit égal à NULL, pour trouver la 
-     *              carte la plus proche où le curseur pourra être posé. Si la fonction arrive a la fin/début du deck elle
-     *              utilisera les pointeurs début/fin pour continuer son itération, enfin si aucune carte n'est séléctionnable
-     *              (cela veut dire que presque toutes les paires ont été trouvées) alors une variable count qui est incrémentée
-     *              à chaque mouvement dans le deck vérifira la condition count > 12 et  val_return prendra la valeur de current_focus
-     *              ce qui nous fait sortir de la boucle while. Sinon si une carte est trouvée val_return prendra son adresse en valeur
-     *              et aura une valeur différente de NULL.
-     * Retour : Cette fonction renvoie un pointeur de structure Carte étant la carte dans le deck la plus proche où le curseur
-     *          peut être placé.
+     * Traitement : Cette fonction va d'abord regarder de quel côté elle doit parcourir le tableau en fonction de la variable direction,
+     *              si la direction est égale à g alors elle regardera à sa gauche, sinon elle regarde à sa droite. Elle va en suite regarder
+     *              toute les cartes jusq'à trouver une carte ou elle peut poser le curseur (une carte avec pour état 0), si elle en trouve une
+     *              elle renvoie l'adresse de cette carte, sinon si elle ne trouve aucune carte (donc la varaible count et plus grand que 12)
+     *              alors elle renvoie l'adresse du pointeur current_focus, donc ou se trouvait le joueur avant d'appuyer sur 'a' ou 'z'.
+     * Retour : Cette fonction renvoie l'adresse de la carte la plus proche où l'on peut mettre le curseur
     */
     Carte *val_return = NULL;
     Carte *current_val = current_focus;
@@ -510,7 +512,7 @@ void Jeu(int width)
         box(resultBox, ACS_VLINE, ACS_HLINE);
     
         // affichage des scores
-        results(resultBox, (float)elasped_time, game);
+        results(resultBox, (float)elasped_time-2.0, game,0);
         wrefresh(resultBox);
         key = ' ';
         while (key != 'q' && key != 'Q') // si touche 'q' pressee : arret du jeu
@@ -519,6 +521,4 @@ void Jeu(int width)
         
         delwin(resultBox);
         LibereDeck(deck);
-
-        clear();
 }

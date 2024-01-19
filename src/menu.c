@@ -153,43 +153,51 @@ void DisplayBanner(WINDOW *container, int posx, int posy)
     return;
 }
 
-int Rejouer()
+int Rejouer(int width,int height)
 {
     /**
      * Fonction : Rejouer
-     * Param : Aucun paramètre
+     * Param : 
+     *      - width : permet d'avoir la largeur du jeu
+     *      - height : permet d'avoir la hauteur du jeu
      * Traitement : Cette fonction marche comme le menu de base, elle sera seulement affichée après une partie et demandera au joueur
      *              si il veut refaire une partie dans ce mode de jeu ou si il veut changer de mode de jeu (donc revenir au menu) ou
      *              quitter le jeu.
-     * Retour : Cette fonction ne peut retourne que 3 valeur : 2, 1 ou 0. 2 signifie que le joueur veut rejouer au même mode de jeu,
-     *          1 signifie que le joueur veut retourner au menu principale et 0 signifie que le joueur ne veut plus jouer au jeu et
-     *          donc veut le quitter.
+     * Retour :
+     *      - 0 : Pour quitter le jeu
+     *      - 1 : Pour retourner au menu
+     *      - 2 : Pour relancer le même mode de jeu
     */
-    clear();
+
+    init_pair(11,COLOR_BLACK,COLOR_WHITE);
+    init_pair(12,COLOR_WHITE,COLOR_BLACK);
 
     int choix = 1;
     bool inputError = 0;
-    int maxx, maxy;
 
     char input[2];
-
-    getmaxyx(stdscr,maxy,maxx);
-
+    
     WINDOW * choiceBox = NULL;
+    WINDOW * CLEARD = NULL;
 
-    choiceBox = subwin(stdscr,6,30,(int)maxy/2-3,(int)maxx/2-15);
-    wborder(choiceBox,'|','|','-','-',' ',' ',' ',' ');
+    CLEARD = subwin(stdscr,12,60,(int)(height/2)-6,(int)(width/2)-30);
+    wbkgd(CLEARD,COLOR_PAIR(11));
+    wclear(CLEARD);
+    
+    
+    choiceBox = subwin(stdscr,6,30,(int)(height/2)-2,(int)(width/2)-15);
+    wbkgd(choiceBox,COLOR_PAIR(11));
 
-    border('|','|','-','-',' ',' ',' ',' ');
-
-    mvwprintw(stdscr,(int)(maxy/2)-6,(int)(maxx/2)-17,"Voulez-vous rejouer a ce mode de jeu ?");
+    mvwprintw(CLEARD,1,12,"Voulez-vous rejouer a ce mode de jeu ?");
 
     do
     {
-        wmove(choiceBox,4,14);
+        wclear(choiceBox);
+        //wborder(choiceBox,'|','|','-','-',' ',' ',' ',' ');
+        wmove(choiceBox,5,14);
         wclrtoeol(choiceBox);
 
-        mvwprintw(choiceBox,1,6,"o - recommencer");
+        mvwprintw(choiceBox,1,6,"r - recommencer");
         mvwprintw(choiceBox,2,6,"q - quitter le jeu");
         mvwprintw(choiceBox,3,6,"m - retourner au menu");
 
@@ -198,30 +206,37 @@ int Rejouer()
 
             // Affichage du message d'erreur en gras, souligné et avec fond rouge
             wattron(stdscr, A_BOLD | A_UNDERLINE | COLOR_PAIR(10));
-            mvwprintw(stdscr,(int) (maxy/2)-4,(int) (maxx/2)-8, "%s", errorText);
+            mvwprintw(stdscr,(int) (height/2)-3,(int) (width/2)-8, "%s", errorText);
             wattroff(stdscr, A_BOLD | A_UNDERLINE | COLOR_PAIR(10));
         }
         
         refresh();
 
-        mvwgetnstr(choiceBox, 4, 15, input, 1);
+        wattron(choiceBox,COLOR_PAIR(12));
+        mvwgetnstr(choiceBox, 5, 15, input, 1);
+        wattroff(choiceBox,COLOR_PAIR(12));
+
+
+        //permet de prendre tout type d'input, minuscule ou majuscule
+        if(input[0] >= 97 && input[0] <= 122)
+            input[0] -= 32;
 
         switch(input[0])
         {
-            case 'o':
+            case 'R':
                 choix = 2;
                 break;
-            case 'm':
+            case 'M':
                 choix = 1;
                 break;
-            case 'q':
+            case 'Q':
                 choix = 0;
                 break;
             default:
                 inputError = 1;
                 break;
         }
-    }while(input[0] != 'o' && input[0] != 'm' && input[0] != 'q');
+    }while(input[0] != 'R' && input[0] != 'M' && input[0] != 'Q');
 
     clear();
     refresh();
