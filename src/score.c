@@ -1,7 +1,7 @@
 #include "../include/score.h"
 
 void filFile(FILE *fichier2, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]){
-        /*
+    /*
     Fonction : filFile
     Param : 
         - fichier2 : fichier à remplir
@@ -27,6 +27,7 @@ void filFile(FILE *fichier2, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], c
     fputs(nom3, fichier2);
     fputs(" ", fichier2);
     fputs(score3, fichier2);
+    //Fermeture fichier
     fclose(fichier2);
 }
 
@@ -44,7 +45,7 @@ void filVoidFile(FILE * fichier2, char nom[TAILLE_NOM], char score[TAILLE_SCORE]
     fputs(nom, fichier2);
     fputs(" ", fichier2);
     fputs(score, fichier2);
-
+    //Fermeture fichier
     fclose(fichier2);
 }
 
@@ -59,23 +60,21 @@ void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char s
     Traitement : Affiche les scores du fichier
     Retour :  Aucun
     */
-
-    noecho();
-
     wclear(resultBox);
     box(resultBox, ACS_VLINE, ACS_HLINE);
-    if(game && mode != 3){
+    if(game && mode != 3){ //Si partie perdue
         mvwprintw(resultBox, 1, 1, "DEFAITE");
-    }else{
+    }else{ //Si partie gagnée
         mvwprintw(resultBox, 1, 1, "VICTOIRE");
     }
+    //Affichage des meilleurs temps
     mvwprintw(resultBox, 2, 1, "Meilleurs chrono :");
     mvwprintw(resultBox, 3, 1, "1 %s %s", nom1, score1);
     mvwprintw(resultBox, 4, 1, "2 %s %s", nom2, score2);
     mvwprintw(resultBox, 5, 1, "3 %s %s", nom3, score3);
 }
 
-void looseResults(WINDOW * resultBox, bool game,int mode){
+int looseResults(WINDOW * resultBox, bool game,int mode){
     /*
     Fonction : looseResults
     Param : 
@@ -88,50 +87,60 @@ void looseResults(WINDOW * resultBox, bool game,int mode){
     */
     FILE *fichier = NULL;
     fichier = fopen("jeuhighscore.txt","r");
+    if(fichier == NULL){ //Si pas de fichier ou erreur d'ouverture
+        wclear(resultBox);
+        box(resultBox, ACS_VLINE, ACS_HLINE);
+        mvwprintw(resultBox, 1, 1, "DEFAITE");
+        mvwprintw(resultBox, 2, 1, "Impossible d'ouvrir le fichier score et aucun score a enregistrer");
+        return -3;
+    }else{
+        char c = fgetc(fichier);
+        char nom1[TAILLE_NOM] = {0}, nom2[TAILLE_NOM] = {0}, nom3[TAILLE_NOM] = {0} ;
+        char score1[TAILLE_SCORE] = {0}, score2[TAILLE_SCORE] = {0}, score3[TAILLE_SCORE] = {0};
+        int espace = 0, i = 1, ligne = 1;
 
-    char c = fgetc(fichier);
-    char nom1[TAILLE_NOM] = {0}, nom2[TAILLE_NOM] = {0}, nom3[TAILLE_NOM] = {0} ;
-    char score1[TAILLE_SCORE] = {0}, score2[TAILLE_SCORE] = {0}, score3[TAILLE_SCORE] = {0};
-    int espace = 0, i = 1, ligne = 1;
-
-    while(c != EOF){
-        switch (c) {
-            case ' ' :
-                espace+=1;
-                break;
-            case '\n' :
-                i+=1;
-                espace = 0;
-                ligne+=1;
-                break;
-            default :
-                break;
-        }
-        if (espace == 1) {
-            if (c != ' '){
-                if (ligne == 1){
-                    strncat(nom1, &c, 1);
-                }else if (ligne == 2){
-                    strncat(nom2, &c, 1);
-                }else if (ligne == 3){
-                    strncat(nom3, &c, 1);
+        while(c != EOF){ //Parcours du fichier et enregistrement des scores
+            switch (c) {
+                case ' ' :
+                    espace+=1;
+                    break;
+                case '\n' :
+                    i+=1;
+                    espace = 0;
+                    ligne+=1;
+                    break;
+                default :
+                    break;
+            }
+            if (espace == 1) { //Si 2eme mot de la ligne
+                if (c != ' '){
+                    if (ligne == 1){
+                        strncat(nom1, &c, 1);
+                    }else if (ligne == 2){
+                        strncat(nom2, &c, 1);
+                    }else if (ligne == 3){
+                        strncat(nom3, &c, 1);
+                    }
                 }
             }
-        }
-        if (espace == 2) {
-            if (c != ' '){
-                if (ligne == 1){
-                    strncat(score1, &c, 1);
-                }else if (ligne == 2){
-                    strncat(score2, &c, 1);
-                }else if (ligne == 3){
-                    strncat(score3, &c, 1);
+            if (espace == 2) { //Si 3eme mot de la ligne
+                if (c != ' '){
+                    if (ligne == 1){
+                        strncat(score1, &c, 1);
+                    }else if (ligne == 2){
+                        strncat(score2, &c, 1);
+                    }else if (ligne == 3){
+                        strncat(score3, &c, 1);
+                    }
                 }
             }
+            c = fgetc(fichier);
         }
-        c = fgetc(fichier);
+        //fermeture du fichier et affichage des résultats
+        fclose(fichier);
+        displayResults(resultBox, game, nom1, score1, nom2, score2, nom3, score3, mode);
+        return 0;
     }
-    displayResults(resultBox, game, nom1, score1, nom2, score2, nom3, score3,mode);
 }
 
 int winResults(WINDOW * resultBox, float temps, bool game){
@@ -153,19 +162,22 @@ int winResults(WINDOW * resultBox, float temps, bool game){
 
     //transforme le float en chaine de caracteres
     snprintf(tempsJoueur, sizeof(tempsJoueur), "%.1f", temps);
-    if (fichier == NULL){
+
+    if (fichier == NULL){ //Si pas de fichier ou erreur d'ouverture
         mvwprintw(resultBox, 1, 1, "Entrer votre nom en 4 lettres :\n");
         echo();
         mvwgetnstr(resultBox, 2, 1, nomJoueur, 4);
         fichier = fopen("jeuhighscore.txt","w+");
+        //Enregistrement du score et fermeture du fichier
         filVoidFile(fichier, nomJoueur, tempsJoueur);
+        fclose(fichier);
         return -3;
     } else {
         char c = fgetc(fichier);
         char nom1[TAILLE_NOM] = {0}, nom2[TAILLE_NOM] = {0}, nom3[TAILLE_NOM] = {0} ;
         char score1[TAILLE_SCORE] = {0}, score2[TAILLE_SCORE] = {0}, score3[TAILLE_SCORE] = {0};
         int espace = 0, i = 1, ligne = 1;
-        while(c != EOF){
+        while(c != EOF){ //Parcours du fichier et enregistrement des scores enregistrés
             switch (c) {
                 case ' ' :
                     espace+=1;
@@ -178,7 +190,7 @@ int winResults(WINDOW * resultBox, float temps, bool game){
                 default :
                     break;
             }
-            if (espace == 1) {
+            if (espace == 1) { //Si 2eme mot de la ligne
                 if (c != ' '){
                     if (ligne == 1){
                         strncat(nom1, &c, 1);
@@ -189,7 +201,7 @@ int winResults(WINDOW * resultBox, float temps, bool game){
                     }
                 }
             }
-            if (espace == 2) {
+            if (espace == 2) { //Si 3eme mot de la ligne
                 if (c != ' '){
                     if (ligne == 1){
                         strncat(score1, &c, 1);
@@ -202,18 +214,18 @@ int winResults(WINDOW * resultBox, float temps, bool game){
             }
             c = fgetc(fichier);
         }
-        if (atoi(score3)>temps){
+        if (atoi(score3)>temps){ //Si score du joueur meilleur que le 3eme (atoi transforme une chaine de char en valeur)
             mvwprintw(resultBox, 1, 1, "Entrer votre nom en 4 lettres :\n");
             echo();
             mvwgetnstr(resultBox, 2, 1, nomJoueur, 4);
-            if ((atoi(score1))>temps){
+            if ((atoi(score1))>temps){ //Si score du joueur meilleur que le 1er
                 strcpy(score3, score2);
                 strcpy(nom3, nom2);
                 strcpy(score2, score1);
                 strcpy(nom2, nom1);
                 strcpy(score1, tempsJoueur);
                 strcpy(nom1, nomJoueur);
-            }else if((atoi(score1))<temps && (atoi(score2))>temps){
+            }else if((atoi(score1))<temps && (atoi(score2))>temps){ //Si score meilleur que le 2eme mais pas le 1er
                 strcpy(score3, score2);
                 strcpy(nom3, nom2);
                 strcpy(score2, tempsJoueur);
@@ -223,9 +235,11 @@ int winResults(WINDOW * resultBox, float temps, bool game){
                 strcpy(nom3, nomJoueur);
             }
         }
+        //Modification du fichier
         fichier = fopen("jeuhighscore.txt","w+");
         filFile(fichier, nom1, score1, nom2, score2, nom3, score3);
-        
+        //fermeture du fichier et affichage des résultats
+        fclose(fichier);
         displayResults(resultBox, game, nom1, score1, nom2, score2, nom3, score3,0);
         return 0;
     }
@@ -242,12 +256,13 @@ int results(WINDOW * resultBox, float temps, bool game,int mode){
                  gagnée ou non
     Retour :  Aucun
     */
-    if(game){
-        looseResults(resultBox, game,mode);
-    }else{
-        int var = winResults(resultBox, temps, game);
-        if(var == -3){
+    int var;
+    if(game){ //Si partie perdue
+        var = looseResults(resultBox, game,mode);
+    }else{ //Si partie gagnée
+        var = winResults(resultBox, temps, game);
+    }
+    if(var == -3){ //Si erreur d'ouverture du fichier
             return -3;
         }
-    }
 }
