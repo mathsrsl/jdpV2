@@ -59,6 +59,9 @@ void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char s
     Traitement : Affiche les scores du fichier
     Retour :  Aucun
     */
+
+    noecho();
+
     wclear(resultBox);
     box(resultBox, ACS_VLINE, ACS_HLINE);
     if(game && mode != 3){
