@@ -1,7 +1,7 @@
 #include "../include/score.h"
 
 void filFile(FILE *fichier2, char nom1[TAILLE_NOM], char score1[TAILLE_SCORE], char nom2[TAILLE_NOM], char score2[TAILLE_SCORE],char nom3[TAILLE_NOM], char score3[TAILLE_SCORE]){
-    /*
+        /*
     Fonction : filFile
     Param : 
         - fichier2 : fichier à remplir
@@ -53,7 +53,7 @@ void displayResults(WINDOW * resultBox, bool game, char nom1[TAILLE_NOM], char s
     Fonction : displayResults
     Param : 
         - resultBox : fenêtre pour afficher les résultats
-        - game : booléen pour savoir si la partie est remportée ou perdu 
+        - game : booléen pour savoir si la partie est remportée ou perdu
         - nom1[TAILLE_NOM], nom2[TAILLE_NOM], nom3[TAILLE_NOM] : noms des 3 meilleurs joueurs
         - score1[TAILLE_SCORE], score2[TAILLE_SCORE], score3[TAILLE_SCORE] : scores des 3 meilleurs joueurs
     Traitement : Affiche les scores du fichier
@@ -131,7 +131,7 @@ void looseResults(WINDOW * resultBox, bool game,int mode){
     displayResults(resultBox, game, nom1, score1, nom2, score2, nom3, score3,mode);
 }
 
-void winResults(WINDOW * resultBox, float temps, bool game){
+int winResults(WINDOW * resultBox, float temps, bool game){
     /*
     Fonction : winResults
     Param : 
@@ -156,6 +156,7 @@ void winResults(WINDOW * resultBox, float temps, bool game){
         mvwgetnstr(resultBox, 2, 1, nomJoueur, 4);
         fichier = fopen("jeuhighscore.txt","w+");
         filVoidFile(fichier, nomJoueur, tempsJoueur);
+        return -3;
     } else {
         char c = fgetc(fichier);
         char nom1[TAILLE_NOM] = {0}, nom2[TAILLE_NOM] = {0}, nom3[TAILLE_NOM] = {0} ;
@@ -221,6 +222,7 @@ void winResults(WINDOW * resultBox, float temps, bool game){
         }
         fichier = fopen("jeuhighscore.txt","w+");
         filFile(fichier, nom1, score1, nom2, score2, nom3, score3);
+        
         displayResults(resultBox, game, nom1, score1, nom2, score2, nom3, score3,0);
     }
 }
@@ -239,6 +241,9 @@ void results(WINDOW * resultBox, float temps, bool game,int mode){
     if(game){
         looseResults(resultBox, game,mode);
     }else{
-        winResults(resultBox, temps, game);
+        int var = winResults(resultBox, temps, game);
+        if(var == -3){
+            return -3;
+        }
     }
 }
