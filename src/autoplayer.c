@@ -13,21 +13,21 @@ void displayGameAuto (Carte *deck, Carte *compared1, Carte *compared2, int TAILL
     for (int i = 0; i < TAILLE_DECK; i++){
         if (&deck[i] != compared1 && (deck + i)->etat != 3 && &deck[i] != compared2)
         {
-            (deck + i)->etat = 0;
+            (deck + i)->etat = 0; //Carte normale 
             DisplayCard((deck + i), LONGUEUR, LARGEUR);
         }
         else if ((deck + i) == compared1 && (deck + i)->etat != 3)
         {
-            compared1->etat = 2;
+            compared1->etat = 2; //Carte selectionnée
             DisplayCard(compared1, LONGUEUR, LARGEUR);
         }else if ((deck + i) == compared2 && (deck + i)->etat != 3)
         {
-            compared2->etat = 2;
+            compared2->etat = 2; //Carte selectionnée
             DisplayCard(compared2, LONGUEUR, LARGEUR);
         }
         else if ((deck + i)->etat == 3)
         {
-            (deck + i)->etat = 3;
+            (deck + i)->etat = 3; //Paries trouvées
             DisplayCard((deck + i), LONGUEUR, LARGEUR);
         }
     }
@@ -82,13 +82,13 @@ int compare(Carte *compared1, Carte *compared2, Carte *deck, int count){
                 sont les mêmes 
     Retour :  retourne le compteur de paire trouvée
     */
-    if(compared1->var == compared2->var){
+    if(compared1->var == compared2->var){ //Si les cartes sont les mêmes
         AttributsInit(compared1, 3);
         AttributsInit(compared2, 3);
         displayGameAuto(deck, compared1, compared2, TAILLE_DECK);
         count++;
         return count;
-    }else{
+    }else{ //Si les cartes sont différentes
         AttributsInit(compared1, 0);
         AttributsInit(compared2, 0);
         return count;
@@ -141,9 +141,12 @@ void autoplayer(int width){
         // DisplayCard();
         while (game && br)
         {
+            //Calcul du temps
             elapsed_time = CalcElapsed_Time(start_time);
+            //Affichage du jeu
             displayGameAuto(deck, compared1, compared2, TAILLE_DECK);
-            
+
+            //Choisi une 1ere carte dont l'état est 0
             do{
                 elapsed_time = CalcElapsed_Time(start_time);
 
@@ -155,6 +158,7 @@ void autoplayer(int width){
                 }
             }while(compared1->etat != 0 || compared1 == compared2);
 
+            //Choisi une 2eme carte dont l'état est 0 et différente de la 1ere
             do{
                 elapsed_time = CalcElapsed_Time(start_time);
                 
@@ -166,9 +170,11 @@ void autoplayer(int width){
                 }
             }while(compared2->etat != 0 || compared2 == compared1);
 
+            //Met à jour le visuel du jeu
             displayGameAuto(deck, compared1, compared2, TAILLE_DECK);
             chronoCompare = elapsed_time;
 
+            //Boucle qui attend 2 secondes avant de continuer
             while (elapsed_time - chronoCompare <= 2 && elapsed_time != 0)
             {
                 elapsed_time = CalcElapsed_Time(start_time);
@@ -178,10 +184,13 @@ void autoplayer(int width){
                     br = 0;
                 }
             }
+
+            //Regarde si les cartes sont les memes ou pas
             count = compare(compared1, compared2, deck, count);
             if(count==(TAILLE_DECK/2)){
                 game = 0;
             }
+            //Réaffiche le jeu et remet à 0 les cartes comparées
             displayGameAuto(deck, compared1, compared2, TAILLE_DECK);
             compared1 = NULL;
             compared2 = NULL;
@@ -192,5 +201,6 @@ void autoplayer(int width){
                 br = 0;
             }
         }
+    //Affichage et si meilleur, enregistrement du scores
     endGame (deck, (float)elapsed_time-2.0, game, width);
 }
