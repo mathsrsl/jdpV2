@@ -224,10 +224,11 @@ int winResults(WINDOW * resultBox, float temps, bool game){
         filFile(fichier, nom1, score1, nom2, score2, nom3, score3);
         
         displayResults(resultBox, game, nom1, score1, nom2, score2, nom3, score3,0);
+        return 0;
     }
 }
 
-void results(WINDOW * resultBox, float temps, bool game,int mode){
+int results(WINDOW * resultBox, float temps, bool game,int mode){
     /*
     Fonction : results
     Param :

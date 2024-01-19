@@ -241,5 +241,8 @@ int Rejouer(int width,int height)
     clear();
     refresh();
 
+    delwin(choiceBox);
+    delwin(CLEARD);
+
     return choix;
 }

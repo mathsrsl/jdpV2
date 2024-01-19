@@ -120,8 +120,8 @@ void AutoPlayer2(int width)
 
     clear();
     nodelay(stdscr, TRUE);
-    curs_set(0); 
-    start_color();
+    noecho();
+    curs_set(0);
 
     init_pair(3, COLOR_WHITE, COLOR_BLACK); // carte normal
     init_pair(4, COLOR_GREEN, COLOR_BLACK); // carte focus
@@ -223,9 +223,12 @@ void AfficheScore(int width,int quitter)
         results(resultBox,0.0,1,3);
     else
         results(resultBox,0.0,1,0);
+
     wrefresh(resultBox);
-    key = ' ';
+
     while (key != 'q' && key != 'Q') // si touche 'q' pressee : arret du jeu
         key = getch();
+
+    delwin(resultBox);
 
 }
