@@ -27,10 +27,10 @@ struct Carte
 
 // Donne une valeur a tout les attributs d'une carte
 void AttributsInit(Carte *c, unsigned int etat);
-// Affiche les cartes avec leurs bordure
+// Affiche les cartes avec leur bordure
 void DisplayCard(Carte *c, int longeur, int largeur);
 
-// Affiche les cartes en fonction des pointeurs et de leur état, cette fonction appel DispalyCard
+// Affiche les cartes en fonction des pointeurs et de leur état, cette fonction appelle DisplayCard
 void DisplayCardPtr(Carte *deck, Carte *current_focus, Carte *compared, int TAILLE);
 // donne la position x de la carte n (n étant entre 0 et 11)
 int PosCardX(int numCard);
@@ -43,11 +43,11 @@ void LettreAlea(Carte *deck, char lettre[], int taille);
 // pour que l'on puisse sortir de la boucle sans avoir a retourner quoi que ce soit
 int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct timespec start_time, char input);
 
-// cette fonction va être utilisée seulement quand on deux cartes sont comparée, elle permet
+// cette fonction va être utilisée seulement quand on deux cartes sont comparées, elle permet
 // de renvoyer les modifications à faire sur les cartes et les variables utilisées
 int CompareCard(Carte *current_focus, Carte *compared,struct timespec start_time, double chronoCompare);
 
-// Crée le deck de carte et renvoie un pointeur sur le deck, les cartes dans le deck ont leur attributs initialisé sauf WINDOW
+// Crée le deck de carte et renvoie un pointeur sur le deck, les cartes dans le deck ont leurs attributs initialisés sauf WINDOW
 Carte *CreationDeck();
 // libère le deck créé (évite des problèmes de mémoire)
 void LibereDeck(Carte *deck);
