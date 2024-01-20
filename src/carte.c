@@ -486,8 +486,6 @@ void Jeu(int width)
             }
 
             elasped_time = CalcElapsed_Time(start_time);
-            //if ( elasped_time >= 120) // a envlever ?
-                //break;
     
             // savoir si il faut bloquer la récuperation d'input ou s'il faut continuer à les lires
             // la fonction ne permet pas de se déplacer, l'index est trouvée mais le pointeur n'est pas modifié
