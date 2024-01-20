@@ -36,10 +36,10 @@ double CalcElapsed_Time(struct timespec start_time)//ajouter la bordure dans les
     /**
      * Fonction : CalcElapsed_Time
      * Param :
-     *      - start_time : une structure provenant de la librarie <time.h>, elle a de stocker en elle le début de l'execution du mode de jeu
+     *      - start_time : une structure provenant de la librairie <time.h>, elle permet de stocker le début de l'execution du mode de jeu
      * Traitement : Cette fonction prend la structure start_time qui a pris les valeurs en seconde et nanoseconde le temps écoulé depuis le
      *              début du mode de jeu, elle créé une structure current_time qui prend comme valeur les secondes et nanosecondes
-     *              au moment ou la fonction est executée, elle appel en suite la fonction AfficheBandeau pour afficher le temps écoulé qui
+     *              au moment ou la fonction est executée, elle appelle ensuite la fonction AfficheBandeau pour afficher le temps écoulé qui
      *              est calculé et stocké dans la variable elapsed_time.
      * Retour : Cette fonction retourne elapsed_time, le temps écoulé depuis le début du mode de jeu.
     */
