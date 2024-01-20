@@ -18,7 +18,6 @@ int CompareCardAutoPlayer(Carte * deck,int indexCardA,int indexCardB,struct time
      *      - 0 : si les cartes ne sont pas des paires
      *      - 3 : si le joueur veut quitter le jeu
     */
-    /*comparera les cartes jsp comment*/
     bool estPaire = 0;
     double elapsed_time = CalcElapsed_Time(start_time);
     char ch;
@@ -127,10 +126,10 @@ void AutoPlayer2(int width)
     init_pair(4, COLOR_GREEN, COLOR_BLACK); // carte focus
     init_pair(5, COLOR_BLUE, COLOR_BLACK);  // carte comparée
 
-    //déclaration des varaibles utile
-    int count = 0;  //permet de savoir si toute les cartes ont été trouvée
+    //déclaration des variables utiles
+    int count = 0;  //permet de savoir si toutes les cartes ont été trouvée
     int index_current = 0;  //permet de savoir la dernière carte qui a pu être séléctionnée
-    int index_occur = -1;   //permet de savoir quel carte existe déjà en paire avec la dernière carte séléctionnée
+    int index_occur = -1;   //permet de savoir quelle carte existe déjà en paire avec la dernière carte séléctionnée
     int estPaire = 0;
     double lastT= 0.0;
     char ch;
@@ -165,18 +164,18 @@ void AutoPlayer2(int width)
             index_occur = SearchLetter(allLetterKnown,index_current,1);
             //mvwprintw(stdscr,20,5,"index :%d,count : %d,estPaire : %d",index_current,count,estPaire);
             
-            //Si une paire existe on va les comparers
+            //Si une paire existe on va les comparer
             if(index_occur != -1)
             {
                 AttributsInit((deck + index_occur),2);
-                //ici pas besoin de récupérer la valeur de comparaison sachant que les cartes sont déjà connue
+                //ici pas besoin de récupérer la valeur de comparaison sachant que les cartes sont déjà connues
                 estPaire = CompareCardAutoPlayer(deck,index_current,index_occur,start_time,lastT);
                 index_occur = -1;
                 count++;
             }else
             {
                 index_current = SearchLetter(allLetterKnown,index_current,0);
-                //à l'inverse si ces cettes cartes est inconnue on va simplement la comparée à sa voisine.
+                //à l'inverse si cette carte est inconnue on va simplement la comparée à sa voisine.
                 AttributsInit((deck + index_current),2);
                 allLetterKnown[index_current] = (deck + index_current)->var;
                 //ici on récupère la valeur de la fonction compare pour savoir si la seconde carte doit être recherchée ou non
