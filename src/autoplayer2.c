@@ -6,12 +6,12 @@ int CompareCardAutoPlayer(Carte * deck,int indexCardA,int indexCardB,struct time
      * Fonction : CompareCardAutoPlayer
      * Param : 
      *      - deck : pointeur de structure Carte contenant les 12 cartes du jeu
-     *      - indexCardA, indexCardB: Cet entier permet de savoir quel carte on doit comparer avec la deuxième carte en utilisant leur index
+     *      - indexCardA, indexCardB: Cet entier permet de savoir quelle carte on doit comparer avec la deuxième carte en utilisant leur index
      *      - start_time : une structure contenant le temps en seconde et nanoseconde de quand le mode de jeu a été lancé
      *      - lastT : contient le temps en seconde et nanoseconde qu'il était avant l'appel de cette fonction
      * Traitement : Cette fonction est spécifique à l'autoplayer, dans un premier temps cette fonction va utiliser la fonction CalcElapsed_Time
-     *              pour savoir quand les 2 secondes de comparaison sont passé (tout en affichant le temps qui passe), dans cette boucle on vérifie
-     *              si la touche q n'est pas pressé pour arrêter l'autoplayer. Enfin une fois le décompte fini on regarde si a l'index A et B
+     *              pour savoir quand les 2 secondes de comparaison sont passées (tout en affichant le temps qui passe), dans cette boucle on vérifie
+     *              si la touche q n'est pas pressée pour arrêter l'autoplayer. Enfin une fois le décompte fini on regarde si a l'index A et B
      *              du deck si ces deux cartes ont la même valeur au niveau de leur lettre.
      * Retour :
      *      - 1 : si les cartes sont des paires
@@ -65,15 +65,15 @@ int SearchLetter(char letterFound[],int index_current,bool mode)
     /**
      * Fonction : SearchLetter
      * Param : 
-     *      - letterFound : un tableau de la même taille que le deck, ce tableau contien toute les cartes connues
-     *                      ou si inconnu un simple espace pour indiquer une carte inconnue.
-     *      - index_current : permet de savoir ou on se trouve dans le deck.
+     *      - letterFound : un tableau de la même taille que le deck, ce tableau contient toute les cartes connues
+     *                      ou si inconnue un simple espace pour indiquer une carte inconnue.
+     *      - index_current : permet de savoir où on se trouve dans le deck.
      *      - mode : permet d'utiliser une des deux modes de la fonction.
-     * Traitement : Cette fonction a deux modes que l'on peut acceder en mettant 0 ou 1 comme dernier parmètre.
+     * Traitement : Cette fonction a deux modes que l'on peut acceder en mettant 0 ou 1 comme dernier paramètre.
      *              Si le mode est 1 alors la fonction va regarder si la lettre que l'on a à l'index_current a
      *              une paire connue, si elle trouve une paire connue alors elle retourne i (l'index de la paire)
      *              sinon elle retourne -1. Si la fonction est en mode 0 alors elle va chercher la prochaine carte 
-     *              inconnue (la carte dans letterFound ou il y a un espace au lieu d'une lettre) et retourner son
+     *              inconnue (la carte dans letterFound où il y a un espace au lieu d'une lettre) et retourner son
      *              index.
      * Retour : 
      *      - en mode 1 :
@@ -107,8 +107,8 @@ void AutoPlayer2(int width)
      * Traitement : Cette fonction, comme le jeu de base, contient toute les initialisations dont l'algorithme a besoin
      *              pour jouer au jeu, la logique de l'algorithme est la suivante : on utilise un tableau (allLetterKnown)
      *              pour se rappeler de toute les lettres que l'on selectionne, l'algorithme commence à l'index 0 du deck séléctionne cette carte
-     *              puis séléctionne la inconnue dans le tableau (où il y a un espace au lieu d'une lettre), généralement c'est la carte qui suit
-     *              tant que la fonction SearchLetter ne renvoie pas un index de carte connu l'algorithme continue a séléctionner des cartes inconnues
+     *              puis séléctionne une inconnue dans le tableau (où il y a un espace au lieu d'une lettre), généralement c'est la carte qui suit
+     *              tant que la fonction SearchLetter ne renvoie pas un index de carte connue l'algorithme continue a séléctionner des cartes inconnues
      *              et à les stocker dans le talbeau. Si une carte a une paire connue, donc si index_occur n'est pas égal à -1, alors l'algorithme va
      *              prioriser la comparaison de ces deux cartes, pour se faire il regarde toujours après la première séléction d'une carte et après la 
      *              comparaison de deux cartes pour savoir si l'une des deux n'aurait pas de paire connue (si elles ne sont pas des paires). De cette manière
