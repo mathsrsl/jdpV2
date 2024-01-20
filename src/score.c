@@ -83,7 +83,9 @@ int looseResults(WINDOW * resultBox, bool game,int mode){
     Traitement : Fonction qui affiche juste les résultats si le joueur appuie 
                 sur q, sans enregistrer le score ou nom du joueur puisqu'il est considéré
                 comme perdant
-    Retour :  Aucun
+    Retour :
+        - 0 : si on a eu aucun problème d'ouverture de fichier
+        - -3 : si on n'a pas pu ouvrir le fichier ou qu'il n'existe pas
     */
     FILE *fichier = NULL;
     fichier = fopen("jeuhighscore.txt","r");
@@ -152,7 +154,9 @@ int winResults(WINDOW * resultBox, float temps, bool game){
         - game : booléen pour savoir si la partie est remportée ou perdu 
     Traitement : Fonction qui enregistre le score du joueur comme il a gagné,
                  modifie les scores du fichier si besoin et affiche les scores
-    Retour :  Aucun
+    Retour :
+        - 0 : si on a eu aucun problème d'ouverture de fichier
+        - -3 : si on n'a pas pu ouvrir le fichier ou qu'il n'existe pas
     */
     FILE *fichier = NULL;
     fichier = fopen("jeuhighscore.txt","r");
