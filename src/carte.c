@@ -488,8 +488,8 @@ void Jeu(int width)
             elasped_time = CalcElapsed_Time(start_time);
     
             // savoir si il faut bloquer la récuperation d'input ou s'il faut continuer à les lires
-            // la fonction ne permet pas de se déplacer, l'index est trouvée mais le pointeur n'est pas modifié
             buffer = ManageInput(deck, &compared, &current_focus,start_time, key);
+            
             if(buffer == -1)
                 sortir = 0;
             else
