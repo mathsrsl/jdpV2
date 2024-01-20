@@ -92,7 +92,7 @@ int menu(int height, int width)
             case 'Q':
                 endwin();
                 return -1;
-            case '3':
+            case '3': // Pour jouer avec l'autoplayer2
                 endwin();
                 return 3;
             default: //Erreur de saisie
