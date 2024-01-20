@@ -210,6 +210,16 @@ void AutoPlayer2(int width)
 
 void AfficheScore(int width,int quitter)
 {
+    /**
+     * Fonction : AfficheScore
+     * Param :
+     *      - width : permet d'avoir la largeur du jeu
+     *      - quitter : permet de savoir si le joueur a quitté ou non le jeu
+     * Traitement : Cette fonction permet d'afficher les meilleurs scores après la partie de
+     *              l'autoplayer2, elle ne demande pas de nom vu que cet autoplayer n'est pas compté
+     *              dans le tableau des scores.
+     * Retour : Aucune valeur n'est retourner.
+    */
     WINDOW *resultBox = NULL;
     char key= ' ';
 
