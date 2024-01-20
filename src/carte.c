@@ -7,7 +7,7 @@ void AttributsInit(Carte *c, unsigned int etat)
      * Param :
      *      - c : la carte a modifier
      *      - etat : entier entre 0 et 3
-     * Traitement : la fonction change l'etat de la carte qui lui est donnée en parametère.
+     * Traitement : la fonction change l'etat de la carte qui lui est donnée en parametre.
      * Retour : aucune valeur de retour
      */
     c->etat = etat;
@@ -23,7 +23,7 @@ void DisplayCard(Carte *c, int longeur, int largeur)
      *      - largeur : la largeur de la carte
      * Traitement : cette fonction prend en paramètre une carte, sa longeur et sa largeur
      *              elle affiche la carte en fonction de son état (état étant dans la
-     *              structure carte), la longeur et largeur est un define dans le carte.h,
+     *              structure carte), la longueur et largeur est un define dans le carte.h,
      *              mais cela peut-être modifié. Les cartes en fonction de leur état prendrons
      *              des couleurs ou non, un type de bordure précis ou non.
      * Retour : aucune valeur de retour
@@ -64,16 +64,16 @@ void DisplayCardPtr(Carte *deck, Carte *current_focus, Carte *compared, int TAIL
      * Param :
      *      - deck : un pointeur de structure Carte qui va contenir toute les cartes du jeu
      *      - current_focus : un pointeur de structure Carte pointant vers une carte se trouvant dans le deck
-     *                        sur laquelle l'utilisateur se trouve, l'état de cette cartes
+     *                        sur laquelle l'utilisateur se trouve, l'état de cette carte
      *                        est 1.
      *      - compared : un pointeur de structure Carte qui peut pointer sur une carte du deck comme être égal
-     *                   à NULL. Ce pointeur sert a comparer deux cartes entre elle.
+     *                   à NULL. Ce pointeur sert a comparer deux cartes entre elles.
      *      - TAILLE : un entier qui est égal au nombre de carte qui se trouvent dans le deck,
      *                 cet entier est un define dans le carte.h
-     * Traitement : Cette fonction prend en paramètres toute les informations qu'il lui faut
+     * Traitement : Cette fonction prend en paramètres toutes les informations qu'il lui faut
      *              pour afficher les cartes en fonction de leur pointeur. Pour traiter chaque
      *              carte dans le deck elle utilise une boucle for suivie de condition pour
-     *              reconnaitre les cartes pointée qui doivent avoir un certains affichage
+     *              reconnaitre les cartes pointées qui doivent avoir un certains affichage
      *              des cartes qui ont été trouvée (et donc qui ne doivent pas changer
      *              d'affichage) et celle qui ne sont ni focus ni comparée.
      * Retour : aucune valeur de retour
@@ -112,10 +112,10 @@ int PosCardY(int numCard)
      * Fonction : PosCardY
      * Param :
      *      - numCard : la place de la carte dans le deck
-     * Traitement : Cette fonction regarde si la place de la carte dans le deck représenté par
-     *              numCard est plus grand ou égal à 5 pour attribuer à la carte son emplacement
+     * Traitement : Cette fonction regarde si la place de la carte dans le deck représentée par
+     *              numCard est plus grande ou égale à 5 pour attribuer à la carte son emplacement
      *              sur l'axe des ordonnées
-     * Retour : Cette fonction renvoie un entier qui défniie l'endroit ou sera afficher la carte
+     * Retour : Cette fonction renvoie un entier qui définie l'endroit ou sera afficher la carte
      *          sur l'axe des ordonnées.
      */
     if (numCard <= 5)
@@ -132,9 +132,9 @@ int PosCardX(int numCard)
      *      - numCard : la place de la carte dans le deck
      * Traitement : Cette fonction fait un modulo de la position de la carte dans le deck
      *              et regarde le resultat pour attribuer à la carte un emplacement sur
-     *              l'axe des abscisse.
+     *              l'axe des abscisses.
      * Retour : cette fonction renvoie un entier qui définie l'endroit ou sera afficher la
-     *          carte sur l'axe des abscisse.
+     *          carte sur l'axe des abscisses.
      */
     switch (numCard % 6)
     {
@@ -170,18 +170,18 @@ void LettreAlea(Carte *deck, char lettre[], int taille)
      *      - lettre : un tableau de char contenant les lettres pour chaque carte.
      *      - taille : la taille du tableau de lettre qui est aussi la taille du tableau
      *                 de carte.
-     * Traitement : Cette fonction prend le deck de carte, le tableau de lettre (avec les lettres)
-     *              et enfin la taille du tableau de lettre. Elle va en suite rentrer dans la boucle for
+     * Traitement : Cette fonction prend le deck de carte, le tableau de lettres (avec les lettres)
+     *              et enfin la taille du tableau de lettres. Elle va ensuite rentrer dans la boucle for
      *              et faire un pseudo aléatoire lui permettant de séléctionner une lettre par une lettre
      *              qui ne sera jamais la même (sauf si c'est la paire). Une fois la lettre séléctionnée
-     *              elle va donner a la carte du deck (deck + i) la lettre qu'elle a trouvée et
+     *              elle va donner a la carte du deck (deck + i) la lettre qu'elle a trouvé et
      *              continuer ainsi et vu que le random de 0 et 1 est impossible elle va donc
      *              prendre les deux dernières lettres restantes et les donner aux deux dernières
      *              cartes restantes.
      * Retour : aucune valeur de retour.
      */
 
-    srand(time(NULL)); // initialise la seed pour avoir des nombres aléatoire différent a chaque appel
+    srand(time(NULL)); // initialise la seed pour avoir des nombres aléatoires différents a chaque appel
     int index = 0;     // index permettant de prendre une lettre au hasard dans le array
     char temp;         // permet d'echanger la place des cartes
 
@@ -211,18 +211,18 @@ int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct tim
      *      - current_focus : un pointeur de pointeur de structure Carte contenant la carte
      *                        où se trouve l'utilisateur dans le deck.
      *      - start_time : une structure contenant le temps en seconde et nanoseconde de quand le mode de jeu à été lancé.
-     *      - input : permet de savoir quel touche a été appuyé par l'utilisateur.
+     *      - input : permet de savoir quelle touche a été appuyé par l'utilisateur.
      * Traitement : La fonction va d'abord appeler la fonction DisplayCardPtr pour afficher les cartes en fonction des pointeurs
      *              et du deck, par la suite elle va regarder les inputs faits et déplacera le pointeur current_focus à droite ou 
      *              à gauche dans le deck si 'a' ou 'z' sont pressés. Si 'e' est pressé alors elle regarde si compared est égal à NULL
      *              pour savoir si une carte est comparée pour savoir si il faut comparer ces deux cartes ou si il faut simplement
-     *              décaler current_focus et séléctonnier la carte ou était current_foucs avec compared.
+     *              décaler current_focus et sélectionner la carte ou était current_focus avec compared.
      * Retour : 
      *      - 0 si aucun input est fait
-     *      - valeur de count si une comparaison est faites 
+     *      - valeur de count si une comparaison est faite 
      *      - -1 si le joueur veut quitter le jeu
      */
-    // besoin de cette fonction ici pour que les cartes comparee ne changent pas de couleur
+    // besoin de cette fonction ici pour que les cartes comparees ne changent pas de couleur
     // pendant les 2 secondes de delais
     DisplayCardPtr(deck, *current_focus, *compared, TAILLE_DECK);
     // mvwprintw(stdscr, 26, 25, "temp : %c", input);
@@ -241,7 +241,7 @@ int ManageInput(Carte *deck, Carte **compared, Carte **current_focus, struct tim
         if (*compared == NULL && (*current_focus)->etat != 3)
         {
             // fonction avec comme paramètre deck compared current_focus return un float
-            // on verifi si current_focus et bien egal a 1 pour eviter que les cartes revelee et bloquee soient debloquable
+            // on verifie si current_focus et bien egal a 1 pour eviter que les cartes revelees et bloquees soient debloquables
             *compared = *current_focus;
             *current_focus = rechercheCarteAccessible(deck, deck, (deck + TAILLE_DECK - 1), *current_focus, 'd', TAILLE_DECK);
         }
@@ -270,9 +270,9 @@ int CompareCard(Carte *current_focus, Carte *compared,struct timespec start_time
      * Fonction : CompareCard
      * Param : 
      *      - current_focus : un pointeur de pointeur de structure Carte permettant de savoir ou l'on se trouve dans le deck
-     *      - compared : un pointeur de pointeur de structure Carte permettant de savoir quel carte séléctionnée pour être comparée
+     *      - compared : un pointeur de pointeur de structure Carte permettant de savoir quelle carte séléctionnée pour être comparée
      *      - start_time : une structure contenant le temps en seconde et en nanoseconde de quand le jeu a été lancé.
-     *      - chronoCompare : un double permettant de savoir quel seconde nous devons  retirer au temps actuel pour avoir le stop de 2 secondes.
+     *      - chronoCompare : un double permettant de savoir quelle seconde nous devons retirer au temps actuel pour avoir le stop de 2 secondes.
      * Traitement : Cette fonction va d'abord récuperer le temps écoulé dans elapsed_time grâce à la fonction CalcElapsed_Time, grâce à cela elle
      *              va pouvoir faire le temps d'attente avant de valider ou non si les cartes sont des paires. Dans la boucle d'attente la fonction 
      *              peut être quittée si la touche q et appuyé.
@@ -311,7 +311,7 @@ Carte *CreationDeck()
      * Param : aucun paramètres
      * Traitement : Cette fonction commence par créer un tableau dynamiquement avec un calloc de taille TAILLE_DECK
      *              qui est un define dans le fichier carte.h (la taille étant de 12). Par la suite elle créé un tableau
-     *              de lettre contenant les paires qui vont être utilisées pour donner à chaque carte du deck une lettre aléatoire grâce à
+     *              de lettres contenant les paires qui vont être utilisées pour donner à chaque carte du deck une lettre aléatoire grâce à
      *              la fonction LettreAlea() et enfin les positions X et Y grâce au fonction PosCardX et PosCardY des Cartes 
      *              et leur états sont initisalisés grâce à une boucle for.
      * Retour : la fonction retourne le pointeur deck pour pouvoir l'utiliser dans le main comme dans d'autre fichier.
@@ -320,7 +320,7 @@ Carte *CreationDeck()
     Carte *deck = (Carte *)calloc(TAILLE_DECK, sizeof(Carte));
 
     // initialisation de toute les cartes
-    // creation du set de lettre utilisé pour les valeurs des cartes
+    // creation du set de lettres utilisé pour les valeurs des cartes
     char lettre[TAILLE_DECK] = "AABBCCDDEEFF";
 
     if (deck != NULL)
@@ -347,7 +347,7 @@ void LibereDeck(Carte *deck)
     /**
      * Fonction : LibereDeck
      * Param : 
-     *      - deck : un pointeur de structure Carte contenant toute les cartes du jeu
+     *      - deck : un pointeur de structure Carte contenant toutes les cartes du jeu
      * Traitement : Cette fonction libère l'espace mémoire alloué pour le deck de cartes
      * Retour : aucune valeur de retour.
     */
@@ -359,7 +359,7 @@ Carte *rechercheCarteAccessible(Carte *deck, Carte *debut, Carte *fin, Carte *cu
     /**
      * Fonction : rechercheCarteAccessible
      * Param : 
-     *      - deck : un pointeur de structure Carte contenant toute les cartes du jeu
+     *      - deck : un pointeur de structure Carte contenant toutes les cartes du jeu
      *      - debut : un pointeur de structure Carte pointant vers le début du deck
      *      - fin : un pointeur de structure Carte pointant vers la fin du deck
      *      - current_focus : un pointeur de structure Carte permettant de savoir ou se trouve le curseur
@@ -368,7 +368,7 @@ Carte *rechercheCarteAccessible(Carte *deck, Carte *debut, Carte *fin, Carte *cu
      *      - TAILLE :  un entier contenant la taille du deck
      * Traitement : Cette fonction va d'abord regarder de quel côté elle doit parcourir le tableau en fonction de la variable direction,
      *              si la direction est égale à g alors elle regardera à sa gauche, sinon elle regarde à sa droite. Elle va en suite regarder
-     *              toute les cartes jusq'à trouver une carte ou elle peut poser le curseur (une carte avec pour état 0), si elle en trouve une
+     *              toutes les cartes jusqu'à trouver une carte ou elle peut poser le curseur (une carte avec pour état 0), si elle en trouve une
      *              elle renvoie l'adresse de cette carte, sinon si elle ne trouve aucune carte (donc la varaible count et plus grand que 12)
      *              alors elle renvoie l'adresse du pointeur current_focus, donc ou se trouvait le joueur avant d'appuyer sur 'a' ou 'z'.
      * Retour : Cette fonction renvoie l'adresse de la carte la plus proche où l'on peut mettre le curseur
@@ -431,7 +431,7 @@ void Jeu(int width)
      * Fonction : Jeu
      * Param : 
      *      - width : la largeur minimal du terminal
-     * Traitement : Cette fonction met en place le jeu de base, elle initialise les varaibles dont on aura besoin pour jouer au jeu 
+     * Traitement : Cette fonction met en place le jeu de base, elle initialise les variables dont on aura besoin pour jouer au jeu 
      *              comme les pointeurs (deck, current_focus pour savoir ou l'on se trouve dans le jeu et compared). Elle contient aussi
      *              la boucle de jeu et l'appel des fonctions de déplacement, calcule de temps et écriture du score.
      * Retour : Cette fonction ne retourne pas de valeur
@@ -449,8 +449,8 @@ void Jeu(int width)
     
         // creation du deck avec les 12 cartes
         Carte *deck = CreationDeck();
-        Carte *current_focus = &deck[0];            // pointeur permettant de savoir quel carte est focus
-        Carte *compared = NULL;                     // pointeur qui sera initialisee seulement si une carte est selectionnee
+        Carte *current_focus = &deck[0];            // pointeur permettant de savoir quelle carte est focus
+        Carte *compared = NULL;                     // pointeur qui sera initialise seulement si une carte est selectionnee
 
         bool game = 1;
         int count = 0;
@@ -490,7 +490,7 @@ void Jeu(int width)
                 //break;
     
             // savoir si il faut bloquer la récuperation d'input ou s'il faut continuer à les lires
-            // la fonction ne permet pas de se déplacer, l'index est trouvée mais le pointeur n'est pas modifé
+            // la fonction ne permet pas de se déplacer, l'index est trouvée mais le pointeur n'est pas modifié
             buffer = ManageInput(deck, &compared, &current_focus,start_time, key);
             if(buffer == -1)
                 sortir = 0;
@@ -511,7 +511,6 @@ void Jeu(int width)
         resultBox = subwin(stdscr, 7, width, 23, 0);
         box(resultBox, ACS_VLINE, ACS_HLINE);
     
-        // affichage des scores
         results(resultBox, (float)elasped_time-2.0, game,0);
         wrefresh(resultBox);
         key = ' ';
