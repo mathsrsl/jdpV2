@@ -31,7 +31,7 @@ void AfficheBandeau(double elapsed_time)
     wrefresh(chronoBox);
 }
 
-double CalcElapsed_Time(struct timespec start_time)//ajouter la bordure dans les paramètres
+double CalcElapsed_Time(struct timespec start_time)
 {
     /**
      * Fonction : CalcElapsed_Time
